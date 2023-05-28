@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="720.0" maxWidth="1024.0" prefHeight="720.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.client.AdminPanel">
+   <children>
+      <Label fx:id="labelAdmin" contentDisplay="TOP" layoutX="14.0" layoutY="14.0" prefHeight="89.0" prefWidth="244.0" text="Student Accomodation&#10;Admin Panel" textFill="#941717">
+         <font>
+            <Font name="Arial" size="23.0" />
+         </font></Label>
+      <ListView fx:id="listView" layoutX="14.0" layoutY="165.0" onMouseClicked="#showOptionOnSelectedItem" prefHeight="448.0" prefWidth="346.0" AnchorPane.bottomAnchor="107.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="664.0" AnchorPane.topAnchor="165.0" />
+      <Label alignment="CENTER" contentDisplay="TOP" layoutX="14.0" layoutY="124.0" prefHeight="41.0" prefWidth="150.0" text="Alege un student" textAlignment="CENTER" textFill="#941717">
+         <font>
+            <Font name="Arial Bold" size="17.0" />
+         </font>
+      </Label>
+      <TextField fx:id="searchBox" layoutX="175.0" layoutY="132.0" onKeyTyped="#searchForInput" prefHeight="26.0" prefWidth="136.0" promptText="Cauta nume..." />
+      <Button fx:id="searchButton" layoutX="317.0" layoutY="132.0" mnemonicParsing="false" onAction="#searchForInput" prefHeight="26.0" prefWidth="42.0" text="P" />
+      <Button fx:id="generateButton" layoutX="97.0" layoutY="650.0" mnemonicParsing="false" onAction="#generateMatching" prefHeight="56.0" prefWidth="181.0" text="Genereaza Repartizări">
+         <font>
+            <Font name="Arial Bold" size="15.0" />
+         </font>
+      </Button>
+      <Button fx:id="deleteRoomsButton" layoutX="779.0" layoutY="650.0" mnemonicParsing="false" onAction="#deleteRooms" prefHeight="56.0" prefWidth="150.0" text="Sterge Repartizări">
+         <font>
+            <Font name="Arial Bold" size="15.0" />
+         </font>
+      </Button>
+      <Button layoutX="929.0" layoutY="14.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="81.0" text="Logout">
+         <font>
+            <Font name="Arial Bold" size="15.0" />
+         </font>
+      </Button>
+      <Button fx:id="changePasswordButton" layoutX="465.0" layoutY="165.0" mnemonicParsing="false" prefHeight="68.0" prefWidth="163.0" text="Schimbare Parola">
+         <font>
+            <Font name="Arial Bold" size="15.0" />
+         </font>
+      </Button>
+      <Button fx:id="deleteAccountButton" layoutX="465.0" layoutY="271.0" mnemonicParsing="false" prefHeight="68.0" prefWidth="163.0" text="Sterge Cont">
+         <font>
+            <Font name="Arial Bold" size="15.0" />
+         </font>
+      </Button>
+      <Line endX="1024.0" endY="641.5" startY="641.5" />
+      <Label fx:id="statusLabelRooms" layoutX="408.0" layoutY="654.0" prefHeight="48.0" prefWidth="278.0" text="Status Repartizări: Invalide&#10;">
+         <font>
+            <Font name="Arial Bold" size="17.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

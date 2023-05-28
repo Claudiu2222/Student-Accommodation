@@ -1,0 +1,19 @@
+#labelAdmin {
+    -fx-border-color: black;
+    -fx-alignment: center;
+}
+
+.button {
+    -fx-background-color: #3AB0FF;
+    -fx-text-fill: white;
+}
+
+.button:hover {
+    -fx-background-color: #45a049; /* culoarea de fundal la hover */
+    -fx-cursor: hand; /* cursor de tip mână la hover */
+}
+
+.button:focused {
+    -fx-background-color: #45a061;
+}
+
