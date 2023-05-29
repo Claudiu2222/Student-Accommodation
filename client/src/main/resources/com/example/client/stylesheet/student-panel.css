@@ -22,3 +22,41 @@ Button:pressed {
     -fx-font-weight: bold;
 
 }
+
+ListView {
+    -fx-background-color: #3AB0FF;
+    -fx-border-color: #2E8B57;
+    -fx-border-width: 2px;
+    -fx-border-radius: 10px;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #F9F2ED;
+}
+
+ListView .list-cell:odd {
+    -fx-background-color: #3AB0FF;
+    -fx-text-fill: #F9F2ED;
+}
+
+ListView .list-cell:even {
+    -fx-background-color: #3091cc;
+    -fx-text-fill: #F9F2ED;
+}
+
+ListView .list-cell:selected {
+    -fx-background-color: #F87474;
+}
+
+.scroll-bar {
+    -fx-background-color: #F9F2ED;
+    -fx-padding: 0;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #f87474;
+}
+
+.scroll-bar .track {
+    -fx-background-color: #F9F2ED;
+}
+
