@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="643.0" prefWidth="1026.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.client.StudentPanelController">
+    <children>
+        <Label fx:id="labelAdmin" contentDisplay="TOP" layoutX="14.0" layoutY="14.0" prefHeight="89.0" prefWidth="244.0" text="Student Accomodation&#10;Student Panel" textFill="#3ab0ff">
+            <font>
+                <Font name="Arial" size="23.0" />
+            </font>
+        </Label>
+        <ListView fx:id="listView" layoutX="14.0" layoutY="165.0" prefHeight="448.0" prefWidth="346.0" AnchorPane.bottomAnchor="107.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="664.0" AnchorPane.topAnchor="165.0" />
+        <Label alignment="CENTER" contentDisplay="TOP" layoutX="14.0" layoutY="124.0" prefHeight="41.0" prefWidth="150.0" text="Alege un student" textAlignment="CENTER" textFill="#3ab0ff">
+            <font>
+                <Font name="Arial Bold" size="17.0" />
+            </font>
+        </Label>
+        <TextField fx:id="searchBox" layoutX="175.0" layoutY="132.0" onKeyTyped="#searchForInput" prefHeight="26.0" prefWidth="181.0" promptText="Cauta nume..." />
+        <Button fx:id="sendOptionsButton" layoutX="422.0" layoutY="312.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="181.0" text="Trimite optiunile alese">
+            <font>
+                <Font name="Arial Bold" size="15.0" />
+            </font>
+        </Button>
+        <Button fx:id="resetOptionsButton" layoutX="438.0" layoutY="234.0" mnemonicParsing="false" onAction="#removeOptions" prefHeight="56.0" prefWidth="150.0" text="Sterge Repartizări">
+            <font>
+                <Font name="Arial Bold" size="15.0" />
+            </font>
+        </Button>
+        <Button layoutX="930.0" layoutY="45.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="81.0" text="Logout">
+            <font>
+                <Font name="Arial Bold" size="15.0" />
+            </font>
+        </Button>
+        <ListView fx:id="optionsListView" layoutX="665.0" layoutY="165.0" prefHeight="370.0" prefWidth="346.0" />
+        <Label alignment="CENTER" contentDisplay="TOP" layoutX="665.0" layoutY="124.0" prefHeight="41.0" prefWidth="346.0" text="Optiunile alese ( in ordinea preferintelor)" textAlignment="CENTER" textFill="#3ab0ff">
+            <font>
+                <Font name="Arial Bold" size="17.0" />
+            </font>
+        </Label>
+    </children>
+</AnchorPane>

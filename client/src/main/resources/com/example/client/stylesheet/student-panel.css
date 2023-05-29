@@ -2,24 +2,23 @@
     -fx-background-color: #FFB562;
 }
 
-.text-field {
-    -fx-font-size: 18px;
-    -fx-background-color: #F9F2ED;
-
-}
-
-#loginButton {
+Button {
     -fx-background-color: #3AB0FF;
     -fx-background-radius: 30;
     -fx-text-fill: #F9F2ED;
     -fx-font-weight: bold;
     -fx-padding: 5px;
+    -fx-font-size: 14px;
 }
 
-#loginButton:hover {
+Button:hover {
     -fx-background-color: #3091cc;
+    -fx-font-weight: bold;
+
 }
 
-#loginButton:pressed {
+Button:pressed {
     -fx-background-color: #4fb8ff;
+    -fx-font-weight: bold;
+
 }
