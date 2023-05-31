@@ -8,7 +8,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="720.0" maxWidth="1024.0" prefHeight="720.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.client.AdminPanel">
+<AnchorPane fx:id="mainPane" maxHeight="720.0" maxWidth="1024.0" prefHeight="720.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.client.AdminPanel">
    <children>
       <Label fx:id="labelAdmin" contentDisplay="TOP" layoutX="14.0" layoutY="14.0" prefHeight="89.0" prefWidth="244.0" text="Student Accomodation&#10;Admin Panel" textFill="#941717">
          <font>
@@ -37,12 +37,12 @@
             <Font name="Arial Bold" size="15.0" />
          </font>
       </Button>
-      <Button fx:id="changePasswordButton" layoutX="465.0" layoutY="165.0" mnemonicParsing="false" prefHeight="68.0" prefWidth="163.0" text="Schimbare Parola">
+      <Button fx:id="changePasswordButton" layoutX="431.0" layoutY="211.0" mnemonicParsing="false" prefHeight="68.0" prefWidth="163.0" text="Schimbare Parola">
          <font>
             <Font name="Arial Bold" size="15.0" />
          </font>
       </Button>
-      <Button fx:id="deleteAccountButton" layoutX="465.0" layoutY="271.0" mnemonicParsing="false" prefHeight="68.0" prefWidth="163.0" text="Sterge Cont">
+      <Button fx:id="deleteAccountButton" layoutX="698.0" layoutY="211.0" mnemonicParsing="false" prefHeight="68.0" prefWidth="163.0" text="Sterge Cont">
          <font>
             <Font name="Arial Bold" size="15.0" />
          </font>
@@ -53,5 +53,6 @@
             <Font name="Arial Bold" size="17.0" />
          </font>
       </Label>
+      <Label fx:id="nameLabel" layoutX="482.0" layoutY="157.0" prefHeight="41.0" prefWidth="347.0" text="Label" />
    </children>
 </AnchorPane>

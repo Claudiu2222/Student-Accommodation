@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.*;
 
@@ -72,6 +73,12 @@ public class AdminPanel implements Initializable {
     @FXML
     private Button deleteRoomsButton;
 
+    @FXML
+    private AnchorPane mainPane;
+
+    @FXML
+    private Label nameLabel;
+
 
     @FXML
     private void deleteRooms() {
@@ -118,6 +125,9 @@ public class AdminPanel implements Initializable {
         String item = listView.getFocusModel().getFocusedItem();
         changePasswordButton.setVisible(true);
         deleteAccountButton.setVisible(true);
+
+        this.nameLabel.setText(item);
+        this.nameLabel.setVisible(true);
     }
 
     @FXML
@@ -143,6 +153,7 @@ public class AdminPanel implements Initializable {
         deleteAccountButton.setVisible(false);
         generateButton.setFocusTraversable(false);
         deleteRoomsButton.setFocusTraversable(false);
+        nameLabel.setVisible(false);
 
         statusLabelRooms.setText("");
     }
