@@ -1,8 +1,6 @@
 package com.projectjava.server.models.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,14 +10,18 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User extends BaseEntity {
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, unique = true, name = "id")
+    private Integer id;
 
-    @Column(nullable = false, unique = true, length = 50, name= "username")
+    @Column(nullable = false, unique = true, length = 50, name = "username")
     private String username;
 
-    @Column(nullable = false, length = 255, name= "password")
+    @Column(nullable = false, length = 255, name = "password")
     private String password;
 
-    @Column(nullable = false, name= "role")
+    @Column(nullable = false, name = "role")
     private Integer role;
 }

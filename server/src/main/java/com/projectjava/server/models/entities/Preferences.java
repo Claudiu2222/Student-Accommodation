@@ -11,14 +11,18 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Preferences extends BaseEntity{
+public class Preferences {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, unique = true, name= "id")
+    private Integer id;
     @ManyToOne
-    @JoinColumn(name = "student_id", referencedColumnName = "id") 
-    private User student; // ??? should be student
+    @JoinColumn(name = "student_id", referencedColumnName = "user_id")
+    private Student student; // ??? should be student
 
     @ManyToOne
-    @JoinColumn(name = "preference_id", referencedColumnName = "id")
-    private User preference; // ??? should be student
+    @JoinColumn(name = "preference_id", referencedColumnName = "user_id")
+    private Student preference; // ??? should be student
 
     @Column(nullable = false)
     private Integer ranking;

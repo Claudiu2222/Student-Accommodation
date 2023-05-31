@@ -10,7 +10,11 @@ import lombok.NoArgsConstructor;
 @Table(name = "students")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Student extends BaseEntity {
+public class Student {
+
+    @Id
+    private Integer user_id;
+
     @Column(nullable = false, unique = true)
     private String firstName;
 
