@@ -7,12 +7,9 @@ import com.projectjava.server.models.entities.Student;
 import com.projectjava.server.models.entities.User;
 import com.projectjava.server.repositories.StudentRepository;
 import com.projectjava.server.repositories.UserRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
-
 @Service
 public class StudentServiceImpl implements StudentService {
 
@@ -25,14 +22,13 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public ResponseEntity<List<Student>> getStudents() {
-        return null;
+    public List<Student> getStudents() {
+        return studentRepository.findAll();
     }
 
     @Override
     public void createStudent(UserStudentDTO newStudent) {
         User user = StudentMapper.toUser(newStudent);
-        user.setId(null);
 
         // Create the student
         Student student = StudentMapper.toStudent(newStudent);

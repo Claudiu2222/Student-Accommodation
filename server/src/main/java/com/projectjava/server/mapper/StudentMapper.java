@@ -16,7 +16,6 @@ public abstract class StudentMapper {
     }
     public static User toUser(UserStudentDTO userStudentDTO) {
         return User.builder()
-                .id(userStudentDTO.getId())
                 .username(userStudentDTO.getUsername())
                 .password(userStudentDTO.getPassword())
                 .role(0) // student

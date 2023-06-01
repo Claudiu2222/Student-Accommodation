@@ -21,9 +21,9 @@ public class StudentController {
     public void createDummy(@PathVariable Integer numberOfDummies) {
         studentService.createDummys(numberOfDummies);
     }
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<Student>> getAllStudents() {
-        return studentService.getStudents();
+        return ResponseEntity.ok(studentService.getStudents());
     }
     @GetMapping(path = "/{userID}")
     public ResponseEntity<Student> getSpecificStudent(@PathVariable Integer userID) {

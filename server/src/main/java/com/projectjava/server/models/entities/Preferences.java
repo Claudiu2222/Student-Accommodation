@@ -26,5 +26,4 @@ public class Preferences {
 
     @Column(nullable = false)
     private Integer ranking;
-
 }
