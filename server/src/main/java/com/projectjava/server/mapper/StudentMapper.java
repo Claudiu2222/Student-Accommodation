@@ -19,7 +19,7 @@ public abstract class StudentMapper {
                 .id(userStudentDTO.getId())
                 .username(userStudentDTO.getUsername())
                 .password(userStudentDTO.getPassword())
-                .role(0)
+                .role(0) // student
                 .build();
     }
 }

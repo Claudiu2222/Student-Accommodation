@@ -1,5 +1,6 @@
 package com.projectjava.server.controllers;
 
+import com.projectjava.server.models.dtos.UserStudentDTO;
 import com.projectjava.server.models.entities.Student;
 import com.projectjava.server.services.StudentServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +19,24 @@ public class StudentController {
     }
     @PostMapping(path = "/create-dummy={numberOfDummies}")
     public void createDummy(@PathVariable Integer numberOfDummies) {
-
+        studentService.createDummys(numberOfDummies);
     }
-    @GetMapping(path = "")
+    @GetMapping()
     public ResponseEntity<List<Student>> getAllStudents() {
         return studentService.getStudents();
     }
-    @GetMapping(path = "{username}")
-    public ResponseEntity<Student> getSpecificStudent(@PathVariable String username) {
-        return studentService.getStudent(username);
+    @GetMapping(path = "/{userID}")
+    public ResponseEntity<Student> getSpecificStudent(@PathVariable Integer userID) {
+        return ResponseEntity.ok(studentService.getStudent(userID));
+    }
+
+    @PostMapping
+    public void createStudent(@RequestBody UserStudentDTO newStudent) {
+        studentService.createStudent(newStudent);
+    }
+
+    @DeleteMapping(path = "/{userID}")
+    public void deleteStudent(@PathVariable Integer userID) {
+        studentService.deleteStudent(userID);
     }
 }

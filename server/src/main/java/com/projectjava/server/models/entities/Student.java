@@ -23,10 +23,10 @@ public class Student {
     @Column(nullable = false)
     private String lastName;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "yearin")
     private Integer yearIn;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "groupin")
     private String groupIn;
 
     @OneToOne
