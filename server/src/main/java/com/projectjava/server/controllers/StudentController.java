@@ -1,5 +1,6 @@
 package com.projectjava.server.controllers;
 
+import com.projectjava.server.models.dtos.StudentDTO;
 import com.projectjava.server.models.dtos.UserStudentDTO;
 import com.projectjava.server.models.entities.Student;
 import com.projectjava.server.services.StudentServiceImpl;
@@ -13,20 +14,24 @@ import java.util.List;
 @RequestMapping(path = "/students")
 public class StudentController {
     private final StudentServiceImpl studentService;
+
     @Autowired
     public StudentController(StudentServiceImpl studentService) {
         this.studentService = studentService;
     }
+
     @PostMapping(path = "/create-dummy={numberOfDummies}")
     public void createDummy(@PathVariable Integer numberOfDummies) {
         studentService.createDummys(numberOfDummies);
     }
+
     @GetMapping
-    public ResponseEntity<List<Student>> getAllStudents() {
+    public ResponseEntity<List<StudentDTO>> getAllStudents() {
         return ResponseEntity.ok(studentService.getStudents());
     }
+
     @GetMapping(path = "/{userID}")
-    public ResponseEntity<Student> getSpecificStudent(@PathVariable Integer userID) {
+    public ResponseEntity<StudentDTO> getSpecificStudent(@PathVariable Integer userID) {
         return ResponseEntity.ok(studentService.getStudent(userID));
     }
 

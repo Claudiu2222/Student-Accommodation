@@ -2,6 +2,7 @@ package com.projectjava.server.services;
 
 import com.github.javafaker.Faker;
 import com.projectjava.server.mapper.StudentMapper;
+import com.projectjava.server.models.dtos.StudentDTO;
 import com.projectjava.server.models.dtos.UserStudentDTO;
 import com.projectjava.server.models.entities.Student;
 import com.projectjava.server.models.entities.User;
@@ -10,6 +11,7 @@ import com.projectjava.server.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
 public class StudentServiceImpl implements StudentService {
 
@@ -22,23 +24,23 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<Student> getStudents() {
-        return studentRepository.findAll();
+    public List<StudentDTO> getStudents() {
+        return studentRepository.findAll().stream().map(StudentMapper::toStudentDTO).toList();
     }
 
     @Override
     public void createStudent(UserStudentDTO newStudent) {
         User user = StudentMapper.toUser(newStudent);
 
-        // Create the student
         Student student = StudentMapper.toStudent(newStudent);
         student.setUser_id(userRepository.save(user).getId());
         studentRepository.save(student);
     }
 
     @Override
-    public Student getStudent(Integer userID) {
-        return studentRepository.findById(userID).orElse(null);
+    public StudentDTO getStudent(Integer userID) {
+        Student student = studentRepository.findById(userID).orElseThrow(() -> new RuntimeException("Student not found"));
+        return StudentMapper.toStudentDTO(student);
     }
 
     @Override
@@ -59,7 +61,7 @@ public class StudentServiceImpl implements StudentService {
                     .groupIn("A4")
                     .yearIn(2)
                     .build();
-            
+
             this.createStudent(newStudent);
         }
     }
