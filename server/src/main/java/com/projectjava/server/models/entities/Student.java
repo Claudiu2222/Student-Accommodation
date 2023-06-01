@@ -2,6 +2,7 @@ package com.projectjava.server.models.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "students")
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Student {
 
     @Id
