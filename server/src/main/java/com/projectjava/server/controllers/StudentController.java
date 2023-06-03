@@ -1,6 +1,5 @@
 package com.projectjava.server.controllers;
 
-import com.projectjava.server.models.dtos.StudentDTO;
 import com.projectjava.server.models.dtos.UserStudentDTO;
 import com.projectjava.server.models.entities.Student;
 import com.projectjava.server.services.StudentServiceImpl;
@@ -26,12 +25,12 @@ public class StudentController {
     }
 
     @GetMapping
-    public ResponseEntity<List<StudentDTO>> getAllStudents() {
+    public ResponseEntity<List<Student>> getAllStudents() {
         return ResponseEntity.ok(studentService.getStudents());
     }
 
     @GetMapping(path = "/{userID}")
-    public ResponseEntity<StudentDTO> getSpecificStudent(@PathVariable Integer userID) {
+    public ResponseEntity<Student> getSpecificStudent(@PathVariable Integer userID) {
         return ResponseEntity.ok(studentService.getStudent(userID));
     }
 

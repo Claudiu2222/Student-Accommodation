@@ -29,7 +29,4 @@ public class Student {
     @Column(nullable = false, name = "groupin")
     private String groupIn;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
 }

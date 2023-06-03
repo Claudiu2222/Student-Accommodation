@@ -21,6 +21,7 @@ public class UserController {
     public UserController(UserServiceImpl userService) {
         this.userService = userService;
     }
+
     @GetMapping
     public ResponseEntity<List<User>> getUsers() {
         return ResponseEntity.ok(userService.getUsers());
@@ -41,5 +42,6 @@ public class UserController {
     public ResponseEntity<User> updateUser(@PathVariable Integer id, @RequestBody User user) {
         return ResponseEntity.ok(userService.updateUser(id, user));
     }
+
 
 }

@@ -1,8 +1,7 @@
 package com.projectjava.server.services;
 
 import com.github.javafaker.Faker;
-import com.projectjava.server.mapper.StudentMapper;
-import com.projectjava.server.models.dtos.StudentDTO;
+import com.projectjava.server.mapper.UserStudentMapper;
 import com.projectjava.server.models.dtos.UserStudentDTO;
 import com.projectjava.server.models.entities.Student;
 import com.projectjava.server.models.entities.User;
@@ -24,23 +23,23 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<StudentDTO> getStudents() {
-        return studentRepository.findAll().stream().map(StudentMapper::toStudentDTO).toList();
+    public List<Student> getStudents() {
+        return studentRepository.findAll();
     }
 
     @Override
     public void createStudent(UserStudentDTO newStudent) {
-        User user = StudentMapper.toUser(newStudent);
+        User user = UserStudentMapper.toUser(newStudent);
 
-        Student student = StudentMapper.toStudent(newStudent);
+        Student student = UserStudentMapper.toStudent(newStudent);
         student.setUser_id(userRepository.save(user).getId());
         studentRepository.save(student);
     }
 
     @Override
-    public StudentDTO getStudent(Integer userID) {
+    public Student getStudent(Integer userID) {
         Student student = studentRepository.findById(userID).orElseThrow(() -> new RuntimeException("Student not found"));
-        return StudentMapper.toStudentDTO(student);
+        return student;
     }
 
     @Override

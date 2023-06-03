@@ -23,7 +23,7 @@ public class RoommateMatchingServiceImpl implements RoommateMatchingService {
         this.studentService = studentService;
     }
 
-    //TODO 
+    //TODO
     @Override
     public Map<Student, Student> generateRoommateMatching() {
         getAllPreferences();
