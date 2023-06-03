@@ -17,6 +17,6 @@ public interface PreferenceRepository extends JpaRepository<Preference, Integer>
     void deleteAllByStudentId(@Param("stud_id") Integer studentID);
 
 
-    @Query(value = "SELECT * FROM preferences WHERE student_id = :stud_id", nativeQuery = true)
-    List<Preference> findAllByStudentId(@Param("stud_id") Integer studentId);
+    @Query(value = "SELECT p.preference FROM Preference p WHERE p.student.user_id = :stud_id ORDER BY p.ranking ASC")
+    List<Student> findAllByStudentId(@Param("stud_id") Integer studentId);
 }

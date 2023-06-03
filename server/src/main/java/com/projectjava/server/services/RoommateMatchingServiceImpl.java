@@ -4,38 +4,263 @@ import com.projectjava.server.models.entities.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class RoommateMatchingServiceImpl implements RoommateMatchingService {
     private final StudentService studentService;
-    private Map<String, Set<String>> preferences = new HashMap<>();
-    private Map<String, String> receivedProposal = new HashMap<>();
-    private Map<String, String> sentProposal = new HashMap<>();
-    private Set<String> noProposalSentPeople = new HashSet<>();
-    private Set<String> peopleLeftUnmatched = new HashSet<>();
+    private final PreferenceService preferenceService;
+    private List<Student> studentList;
+    private Map<Student, Set<Student>> preferences;
+    private Map<Student, Student> receivedProposal;
+    private Map<Student, Student> sentProposal;
+    private Set<Student> noProposalSentPeople;
+    private Set<Student> peopleLeftUnmatched;
+    private Map<Student, Student> finalMatchings;
+    Student ghostStudent;
+
 
     @Autowired
-    public RoommateMatchingServiceImpl(StudentService studentService) {
+    public RoommateMatchingServiceImpl(StudentService studentService, PreferenceService preferenceService) {
         this.studentService = studentService;
+        this.preferenceService = preferenceService;
     }
 
-    //TODO
+
+    public Map<Student, Student> getRoommateMatchings() {
+        generateRoommateMatching();
+        getFinalMatchings();
+        return finalMatchings;
+    }
+
+    private void getFinalMatchings() {
+        for (Student student : studentList) {
+        
+            if (!preferences.get(student).isEmpty()) {
+                finalMatchings.put(student, preferences.get(student).iterator().next());
+            } else {
+                finalMatchings.put(student, null);
+            }
+        }
+    }
+
     @Override
-    public Map<Student, Student> generateRoommateMatching() {
-        getAllPreferences();
-        //return runIrvingAlgorithm();
+    public void generateRoommateMatching() {
+        initializeDataStructures();
+        preparePreferences();
+        runIrvingAlgorithm();
+        randomizeRemainingStudents();
+    }
+
+    private void initializeDataStructures() {
+        preferences = new HashMap<>();
+        receivedProposal = new HashMap<>();
+        sentProposal = new HashMap<>();
+        noProposalSentPeople = new HashSet<>();
+        peopleLeftUnmatched = new HashSet<>();
+        finalMatchings = new HashMap<>();
+    }
+
+    private void preparePreferences() {
+        studentList = studentService.getStudents();
+        for (Student student : studentService.getStudents()) {
+            preferences.put(student, new LinkedHashSet<>(preferenceService.getPreferencesOfStudent(student.getUser_id())));
+            Collections.shuffle(studentList);
+            Set<Student> preferencesOfStudent = preferences.get(student);
+            for (Student preference : studentList) {
+                if (preference.getUser_id().equals(student.getUser_id()))
+                    continue;
+                preferencesOfStudent.add(preference);
+            }
+        }
+        if (studentList.size() % 2 != 1)
+            addGhostStudent();
+        noProposalSentPeople.addAll(studentList);
+    }
+
+    private void addGhostStudent() {
+        Student ghostStudent = new Student("GHOST", "GHOST", 1000, "X");
+        preferences.put(ghostStudent, new LinkedHashSet<>());
+        for (Student student : studentList) {
+            addPreferencesSymmetrically(student, ghostStudent);
+        }
+        studentList.add(ghostStudent);
+    }
+
+    private void runIrvingAlgorithm() {
+        runPhase1();
+        runPhase2();
+        runPhase3();
+    }
+
+
+    private void runPhase1() {
+        while (existsPeopleWithNoSentProposals()) {
+
+            Student unmatchedPerson = getFirstUnmatchedPerson();
+            Student preferredPerson = getFirstPreferredPerson(unmatchedPerson);
+
+            if (preferredPerson == null) {
+                System.out.println("No preferred person for " + unmatchedPerson);
+                noProposalSentPeople.remove(unmatchedPerson);
+                peopleLeftUnmatched.add(unmatchedPerson);
+                sentProposal.put(unmatchedPerson, null);
+                continue;
+            }
+            if (receivedProposal.get(preferredPerson) == null) {
+                sentProposal.put(unmatchedPerson, preferredPerson);
+                receivedProposal.put(preferredPerson, unmatchedPerson);
+                noProposalSentPeople.remove(unmatchedPerson);
+            } else if (getPreferenceIndex(preferences.get(preferredPerson), unmatchedPerson) < getPreferenceIndex(preferences.get(preferredPerson), receivedProposal.get(preferredPerson))) {
+                rejectSymmetrically(receivedProposal.get(preferredPerson), preferredPerson);
+                sentProposal.put(unmatchedPerson, preferredPerson);
+                receivedProposal.put(preferredPerson, unmatchedPerson);
+                noProposalSentPeople.remove(unmatchedPerson);
+            } else {
+                rejectSymmetrically(unmatchedPerson, preferredPerson);
+            }
+        }
+    }
+
+    private void runPhase2() {
+        for (Student person : preferences.keySet()) {
+            Set<Student> preferenceList = preferences.get(person);
+            Student currentProposal = receivedProposal.get(person);
+            boolean startRemoving = false;
+            Iterator<Student> iterator = preferenceList.iterator();
+            while (iterator.hasNext()) {
+                Student preferredPerson = iterator.next();
+                if (startRemoving) {
+                    preferences.get(preferredPerson).remove(person);
+                    iterator.remove();
+                }
+                if (preferredPerson.equals(currentProposal)) {
+                    startRemoving = true;
+                }
+            }
+        }
+    }
+
+    private void runPhase3() {
+        Deque<Student> peopleStack = new ArrayDeque<>(preferences.keySet());
+        while (!peopleStack.isEmpty()) {
+            Student person = peopleStack.removeLast();
+            if (preferences.get(person).size() >= 2) {
+                List<Student> cycle = new ArrayList<>();
+                Student currentPerson = person;
+                Set<Student> visited = new HashSet<>();
+                while (cycle.isEmpty() || !currentPerson.equals(person)) {
+                    if (!visited.add(currentPerson)) {
+                        break;
+                    }
+                    cycle.add(currentPerson);
+                    Iterator<Student> iterator = preferences.get(currentPerson).iterator();
+                    Student secondPreference = null;
+                    if (iterator.hasNext()) {
+                        iterator.next();
+                        if (iterator.hasNext()) {
+                            secondPreference = iterator.next();
+                            cycle.add(secondPreference);
+                        }
+                    }
+                    if (secondPreference != null) {
+                        List<Student> secondPrefList = new ArrayList<>(preferences.get(secondPreference));
+                        currentPerson = secondPrefList.get(secondPrefList.size() - 1);
+                    }
+                    if (currentPerson.equals(person)) {
+                        cycle.add(person);
+                    }
+                }
+                for (int i = cycle.size() - 1; i >= 1; i--) {
+                    if (i % 2 == 0) {
+                        removePreferencesSymmetrically(cycle.get(i), cycle.get(i - 1));
+                    }
+                }
+                if (preferences.get(person).size() >= 2) {
+                    peopleStack.addLast(person);
+                }
+            }
+        }
+    }
+
+    private void randomizeRemainingStudents() {
+        for (Student person : preferences.keySet()) {
+            if (preferences.get(person).isEmpty()) {
+                peopleLeftUnmatched.add(person);
+            }
+        }
+        if (!peopleLeftUnmatched.isEmpty()) {
+            System.out.println("People left unmatched: " + peopleLeftUnmatched);
+        }
+        Iterator<Student> iterator = peopleLeftUnmatched.iterator();
+        while (iterator.hasNext()) {
+            Student person = iterator.next();
+            if (preferences.get(person).size() != 0) {
+                iterator.remove();
+                continue;
+            }
+            if (sentProposal.get(person) != null && preferences.get(sentProposal.get(person)).size() == 0) {
+                addPreferencesSymmetrically(person, sentProposal.get(person));
+                iterator.remove();
+            }
+        }
+
+        iterator = peopleLeftUnmatched.iterator();
+        while (!peopleLeftUnmatched.isEmpty()) {
+            Student personOne = iterator.next();
+            iterator.remove();
+            Student personTwo = iterator.next();
+            iterator.remove();
+            addPreferencesSymmetrically(personOne, personTwo);
+        }
+    }
+
+    private Student getFirstPreferredPerson(Student unmatchedPerson) {
+        Set<Student> preferredPeople = preferences.get(unmatchedPerson);
+        if (preferredPeople.size() > 0) {
+            return preferredPeople.iterator().next();
+        }
         return null;
     }
 
-    private void getAllPreferences() {
-
+    private Student getFirstUnmatchedPerson() {
+        for (Student unmatchedPerson : preferences.keySet()) {
+            if (sentProposal.get(unmatchedPerson) == null) {
+                return unmatchedPerson;
+            }
+        }
+        return null;
     }
 
-//    private Map<Student, Student> runIrvingAlgorithm() {
-//
-//    }
+    private boolean existsPeopleWithNoSentProposals() {
+        return noProposalSentPeople.size() > 0;
+    }
+
+    private void rejectSymmetrically(Student unmatchedPerson, Student preferredPerson) {
+        sentProposal.remove(unmatchedPerson);
+        noProposalSentPeople.add(unmatchedPerson);
+        removePreferencesSymmetrically(unmatchedPerson, preferredPerson);
+    }
+
+    private <T> int getPreferenceIndex(Set<T> set, T element) {
+        int index = 0;
+        for (T t : set) {
+            if (t.equals(element)) {
+                return index;
+            }
+            index++;
+        }
+        return -1;
+    }
+
+    private void removePreferencesSymmetrically(Student personOne, Student personTwo) {
+        preferences.get(personOne).remove(personTwo);
+        preferences.get(personTwo).remove(personOne);
+    }
+
+    private void addPreferencesSymmetrically(Student personOne, Student personTwo) {
+        preferences.get(personOne).add(personTwo);
+        preferences.get(personTwo).add(personOne);
+    }
+
 }

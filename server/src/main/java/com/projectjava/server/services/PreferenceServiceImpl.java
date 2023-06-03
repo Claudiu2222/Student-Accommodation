@@ -10,7 +10,9 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class PreferenceServiceImpl implements PreferenceService {
@@ -46,8 +48,8 @@ public class PreferenceServiceImpl implements PreferenceService {
     }
 
     @Override
-    public List<Preference> getPreferencesOfStudent(Integer studentId) {
+    public Set<Student> getPreferencesOfStudent(Integer studentId) {
         Student stud = studentRepository.findById(studentId).orElseThrow(() -> new StudentDoesNotExistException(studentId));
-        return preferenceRepository.findAllByStudentId(studentId);
+        return new LinkedHashSet<>(preferenceRepository.findAllByStudentId(stud.getUser_id()));
     }
 }

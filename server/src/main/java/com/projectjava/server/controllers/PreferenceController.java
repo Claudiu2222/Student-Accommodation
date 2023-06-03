@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping(path = "/preferences")
@@ -30,7 +31,7 @@ public class PreferenceController {
     }
 
     @GetMapping(path = "{studentId}")
-    public List<Preference> getPreferencesOfStudent(@PathVariable("studentId") Integer studentId) {
+    public Set<Student> getPreferencesOfStudent(@PathVariable("studentId") Integer studentId) {
         return preferenceService.getPreferencesOfStudent(studentId);
     }
 
@@ -38,6 +39,6 @@ public class PreferenceController {
     public void deletePreferencesOfStudent(@PathVariable("studentId") Integer studentId) {
         preferenceService.deletePreferencesOfStudent(studentId);
     }
-    
+
 
 }

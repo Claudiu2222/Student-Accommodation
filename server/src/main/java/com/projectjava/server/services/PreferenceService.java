@@ -6,6 +6,7 @@ import com.projectjava.server.models.entities.Student;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public interface PreferenceService {
@@ -15,5 +16,5 @@ public interface PreferenceService {
 
     List<Preference> getPreferences();
 
-    List<Preference> getPreferencesOfStudent(Integer studentId);
+    Set<Student> getPreferencesOfStudent(Integer studentId);
 }

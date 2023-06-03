@@ -8,6 +8,9 @@ import java.util.Map;
 
 @Service
 public interface RoommateMatchingService {
-    public Map<Student, Student> generateRoommateMatching();
+    void generateRoommateMatching();
+
+    Map<Student, Student> getRoommateMatchings();
+
 
 }

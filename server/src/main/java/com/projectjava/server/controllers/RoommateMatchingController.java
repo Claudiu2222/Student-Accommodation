@@ -24,7 +24,8 @@ public class RoommateMatchingController {
 
     @GetMapping
     public ResponseEntity<Map<Student, Student>> generateRoommateMatching() {
-        return null;
+        Map<Student, Student> roommateMatching = roommateMatchingService.getRoommateMatchings();
+        return ResponseEntity.ok(roommateMatching);
 
     }
 }

@@ -29,4 +29,10 @@ public class Student {
     @Column(nullable = false, name = "groupin")
     private String groupIn;
 
+    public Student(String firstName, String lastName, Integer yearIn, String groupIn) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.yearIn = yearIn;
+        this.groupIn = groupIn;
+    }
 }
