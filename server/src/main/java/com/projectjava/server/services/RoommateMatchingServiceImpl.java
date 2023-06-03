@@ -17,7 +17,7 @@ public class RoommateMatchingServiceImpl implements RoommateMatchingService {
     private Set<Student> noProposalSentPeople;
     private Set<Student> peopleLeftUnmatched;
     private Map<Student, Student> finalMatchings;
-    Student ghostStudent;
+    private Student ghostStudent;
 
 
     @Autowired
@@ -35,7 +35,6 @@ public class RoommateMatchingServiceImpl implements RoommateMatchingService {
 
     private void getFinalMatchings() {
         for (Student student : studentList) {
-        
             if (!preferences.get(student).isEmpty()) {
                 finalMatchings.put(student, preferences.get(student).iterator().next());
             } else {
@@ -73,19 +72,8 @@ public class RoommateMatchingServiceImpl implements RoommateMatchingService {
                 preferencesOfStudent.add(preference);
             }
         }
-        if (studentList.size() % 2 != 1)
-            addGhostStudent();
-        noProposalSentPeople.addAll(studentList);
     }
 
-    private void addGhostStudent() {
-        Student ghostStudent = new Student("GHOST", "GHOST", 1000, "X");
-        preferences.put(ghostStudent, new LinkedHashSet<>());
-        for (Student student : studentList) {
-            addPreferencesSymmetrically(student, ghostStudent);
-        }
-        studentList.add(ghostStudent);
-    }
 
     private void runIrvingAlgorithm() {
         runPhase1();
@@ -208,9 +196,12 @@ public class RoommateMatchingServiceImpl implements RoommateMatchingService {
         iterator = peopleLeftUnmatched.iterator();
         while (!peopleLeftUnmatched.isEmpty()) {
             Student personOne = iterator.next();
+            Student personTwo = null;
             iterator.remove();
-            Student personTwo = iterator.next();
-            iterator.remove();
+            if (iterator.hasNext()) {
+                personTwo = iterator.next();
+                iterator.remove();
+            }
             addPreferencesSymmetrically(personOne, personTwo);
         }
     }
@@ -259,8 +250,10 @@ public class RoommateMatchingServiceImpl implements RoommateMatchingService {
     }
 
     private void addPreferencesSymmetrically(Student personOne, Student personTwo) {
-        preferences.get(personOne).add(personTwo);
-        preferences.get(personTwo).add(personOne);
+        if (personOne != null)
+            preferences.get(personOne).add(personTwo);
+        if (personTwo != null)
+            preferences.get(personTwo).add(personOne);
     }
 
 }
