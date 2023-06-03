@@ -17,7 +17,6 @@ public class RoommateMatchingServiceImpl implements RoommateMatchingService {
     private Set<Student> noProposalSentPeople;
     private Set<Student> peopleLeftUnmatched;
     private Map<Student, Student> finalMatchings;
-    private Student ghostStudent;
 
 
     @Autowired

@@ -11,6 +11,6 @@ public interface RoommateMatchingService {
     void generateRoommateMatching();
 
     Map<Student, Student> getRoommateMatchings();
-
+   
 
 }
