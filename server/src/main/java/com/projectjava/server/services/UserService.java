@@ -12,5 +12,6 @@ public interface UserService {
     public User createUser(User user);
 
     public void deleteUser(Integer id);
+
     public User updateUser(Integer id, User user);
 }

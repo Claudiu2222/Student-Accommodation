@@ -11,19 +11,25 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Preferences {
+public class Preference {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false, unique = true, name= "id")
+    @Column(nullable = false, unique = true, name = "id")
     private Integer id;
     @ManyToOne
     @JoinColumn(name = "student_id", referencedColumnName = "user_id")
-    private Student student; // ??? should be student
+    private Student student;
 
     @ManyToOne
     @JoinColumn(name = "preference_id", referencedColumnName = "user_id")
-    private Student preference; // ??? should be student
+    private Student preference;
 
     @Column(nullable = false)
     private Integer ranking;
+
+    public Preference(Student student, Student preference, Integer ranking) {
+        this.student = student;
+        this.preference = preference;
+        this.ranking = ranking;
+    }
 }
