@@ -25,12 +25,14 @@ Button:pressed {
 
 ListView {
     -fx-background-color: #3AB0FF;
+    -fx-background-radius: 10px;
     -fx-border-color: #2E8B57;
     -fx-border-width: 2px;
     -fx-border-radius: 10px;
     -fx-font-size: 14px;
     -fx-font-weight: bold;
     -fx-text-fill: #F9F2ED;
+    -fx-padding: 5px;
 }
 
 ListView .list-cell:odd {
@@ -48,6 +50,7 @@ ListView .list-cell:selected {
 }
 
 .scroll-bar {
+    -fx-background-radius: 10px;
     -fx-background-color: #F9F2ED;
     -fx-padding: 0;
 }

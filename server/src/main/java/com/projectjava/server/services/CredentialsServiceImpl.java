@@ -24,4 +24,13 @@ public class CredentialsServiceImpl implements CredentialsService {
             );
         }
     }
+
+    @Override
+    public void checkIfUsernameExist(String username) {
+        User user = userRepository.findUserByUsername(username);
+
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatusCode.valueOf(404), "Error while searching for username! Wrong credentials!");
+        }
+    }
 }

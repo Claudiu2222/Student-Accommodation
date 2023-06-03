@@ -5,6 +5,7 @@ module com.example.client {
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;
     requires org.kordamp.bootstrapfx.core;
+    requires lombok;
 
     opens com.example.client to javafx.fxml;
     exports com.example.client;

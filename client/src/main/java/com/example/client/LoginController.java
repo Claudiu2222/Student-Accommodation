@@ -1,5 +1,6 @@
 package com.example.client;
 
+import com.example.data.Credential;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -21,6 +22,8 @@ public class LoginController {
     @FXML
     private Button loginButton;
 
+    private Credential credential;
+
 
     public static void setStage(Stage stage) {
         LoginController.stage = stage;
@@ -31,6 +34,15 @@ public class LoginController {
         if (codeTextField.getText().isEmpty())
             codeTextField.setPromptText("Introdu un numar matricol!");
         else {
+            this.credential = Credential.builder()
+                    .username(codeTextField.getText())
+                    .build();
+
+            // Make a http request to check if this user exist in the first place !
+            if (checkIfUserExist()) {
+                return;
+            }
+
             //Adaugam verificari mai tarziu cand facem backu
             Parent root = FXMLLoader.load(getClass().getResource("Scene2.fxml"));
             Scene scene = new Scene(root);
@@ -45,6 +57,11 @@ public class LoginController {
         if (passwordTextField.getText().isEmpty())
             passwordTextField.setPromptText("Introdu o parola");
         else {
+            // Complete the credential
+            this.credential.setPassword(passwordTextField.getText());
+
+            // Check if the credentials are ok
+
             //Adaugam verificari mai tarziu cand facem backu
             Parent root = FXMLLoader.load(getClass().getResource("student-panel.fxml"));
             Scene scene = new Scene(root);
@@ -52,5 +69,10 @@ public class LoginController {
             scene.getStylesheets().add(getClass().getResource("stylesheet/student-panel.css").toExternalForm());
             stage.setScene(scene);
         }
+    }
+
+    private boolean checkIfUserExist() {
+
+        return true;
     }
 }
