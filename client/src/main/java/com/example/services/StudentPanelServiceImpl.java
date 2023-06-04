@@ -22,12 +22,9 @@ public class StudentPanelServiceImpl implements StudentPanelService {
     public List<Student> getStudents() throws IOException {
         String url = "http://localhost:8090/students";
         HttpGet request = new HttpGet(url);
-        CloseableHttpResponse response = httpClient.execute(request);
-        try {
+        try (CloseableHttpResponse response = httpClient.execute(request)) {
             return objectMapper.readValue(response.getEntity().getContent(), new TypeReference<List<Student>>() {
             });
-        } finally {
-            response.close();
         }
     }
 

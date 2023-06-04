@@ -43,5 +43,8 @@ public class UserController {
         return ResponseEntity.ok(userService.updateUser(id, user));
     }
 
-
+    @GetMapping(path = "/getId&username={username}")
+    public Integer getId(@PathVariable String username) {
+        return userService.getId(username);
+    }
 }

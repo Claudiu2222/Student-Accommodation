@@ -9,6 +9,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.IOException;
 import java.net.URL;
@@ -35,6 +37,10 @@ public class StudentPanelController implements Initializable {
     private Button sendOptionsButton;
 
     private StudentPanelService studentPanelService;
+
+    @Getter
+    @Setter
+    private Integer userID;
 
     private List<Student> students;
 

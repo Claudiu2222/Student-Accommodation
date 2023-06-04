@@ -15,7 +15,7 @@ public class CredentialsServiceImpl implements CredentialsService {
       this.userRepository = userRepository;
     }
     @Override
-    public void checkCredentials(Credentials credentials) {
+    public Integer checkCredentials(Credentials credentials) {
         User user = userRepository.findUserByUsername(credentials.username());
 
         if (user == null || !user.getPassword().equals(credentials.password())) {
@@ -23,6 +23,14 @@ public class CredentialsServiceImpl implements CredentialsService {
                     HttpStatusCode.valueOf(404), "Error while searching for the user! Wrong credentials!"
             );
         }
+
+        if (user.getFirstTime()) {
+            throw new ResponseStatusException(
+                    HttpStatusCode.valueOf(201)
+            );
+        }
+
+        return user.getId();
     }
 
     @Override
@@ -31,6 +39,38 @@ public class CredentialsServiceImpl implements CredentialsService {
 
         if (user == null) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(404), "Error while searching for username! Wrong credentials!");
+        }
+    }
+
+    @Override
+    public void changePassword(String username, String oldPassword, String password) {
+        User user = userRepository.findUserByUsername(username);
+
+        if (user == null || !user.getPassword().equals(oldPassword)) {
+            throw new ResponseStatusException(
+                    HttpStatusCode.valueOf(404), "Error while searching for the user! Wrong credentials!"
+            );
+        }
+
+        user.setPassword(password);
+        user.setFirstTime(false);
+        userRepository.save(user);
+    }
+
+    @Override
+    public String getRole(String username) {
+        User user = userRepository.findUserByUsername(username);
+
+        if (user == null) {
+            throw new ResponseStatusException(
+                    HttpStatusCode.valueOf(404), "Error while searching for the user! Wrong credentials!"
+            );
+        }
+
+        if (user.getRole() == 1) {
+            return "admin";
+        } else {
+            return "student";
         }
     }
 }

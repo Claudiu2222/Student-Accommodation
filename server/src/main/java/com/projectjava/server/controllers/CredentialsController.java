@@ -17,12 +17,22 @@ public class CredentialsController {
     }
 
     @PostMapping
-    public void checkCredentials(@RequestBody Credentials credentials) {
-        credentialsService.checkCredentials(credentials);
+    public Integer checkCredentials(@RequestBody Credentials credentials) {
+        return credentialsService.checkCredentials(credentials);
     }
 
     @GetMapping(path = "/{username}")
     public void checkIfUsernameExist(@PathVariable String username) {
         credentialsService.checkIfUsernameExist(username);
+    }
+
+    @PostMapping(path = "/username={username}&oldpassword={oldpassword}&password={password}")
+    public void changePassword(@PathVariable String username, @PathVariable String oldpassword, @PathVariable String password) {
+        credentialsService.changePassword(username, oldpassword, password);
+    }
+
+    @GetMapping(path = "/getRole&username={username}")
+    public String getRole(@PathVariable String username) {
+        return credentialsService.getRole(username);
     }
 }

@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface CredentialsService {
-    public void checkCredentials(Credentials credentials);
-    public void checkIfUsernameExist(String username);
+    Integer checkCredentials(Credentials credentials);
+    void checkIfUsernameExist(String username);
+    void changePassword(String username, String oldPassword, String password);
+    String getRole(String username);
 }
