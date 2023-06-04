@@ -16,13 +16,13 @@ public class CredentialsController {
         this.credentialsService = credentialsService;
     }
 
-    @GetMapping
+    @PostMapping
     public void checkCredentials(@RequestBody Credentials credentials) {
         credentialsService.checkCredentials(credentials);
     }
 
     @GetMapping(path = "/{username}")
     public void checkIfUsernameExist(@PathVariable String username) {
-        credentialsService.checkifUsernameExist(String username);
+        credentialsService.checkIfUsernameExist(username);
     }
 }

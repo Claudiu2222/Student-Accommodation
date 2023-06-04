@@ -6,6 +6,8 @@ module com.example.client {
     requires com.dlsc.formsfx;
     requires org.kordamp.bootstrapfx.core;
     requires lombok;
+    requires org.apache.httpcomponents.httpcore;
+    requires org.apache.httpcomponents.httpclient;
 
     opens com.example.client to javafx.fxml;
     exports com.example.client;
