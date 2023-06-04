@@ -3,6 +3,7 @@ package com.example.client;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
@@ -15,6 +16,8 @@ public class StudentPanelController implements Initializable {
     @FXML
     private ListView<String> listView;
 
+    @FXML
+    private Label selectedCountLabel;
     @FXML
     private ListView<String> optionsListView;
 
@@ -64,7 +67,7 @@ public class StudentPanelController implements Initializable {
         HashSet<String> options = new HashSet<>(optionsListView.getItems());
         listView.getItems().clear();
         if (input.isEmpty())
-            listView.getItems().addAll(students);
+            listView.getItems().addAll(Arrays.stream(students).filter((student) -> !options.contains(student)).toList());
         else {
             listView.getItems().addAll(Arrays.stream(students).filter((student) -> student.contains(input) && !options.contains(student)).toList());
         }
@@ -74,6 +77,7 @@ public class StudentPanelController implements Initializable {
     private void removeOptions() {
         optionsListView.getItems().clear();
         searchBox.clear();
+        updateLabel();
         listView.getItems().clear();
         listView.getItems().addAll(students);
     }
@@ -84,10 +88,15 @@ public class StudentPanelController implements Initializable {
 
         listView.setOnMouseClicked(mouseEvent -> {
             String selected = listView.getSelectionModel().getSelectedItem();
+            if (optionsListView.getItems().size() == 10) {
+                listView.getSelectionModel().clearSelection();
+                return;
+            }
             if (selected != null) {
                 optionsListView.getItems().add(selected);
                 listView.getItems().remove(selected);
                 listView.getSelectionModel().clearSelection();
+                updateLabel();
             }
         });
 
@@ -97,7 +106,12 @@ public class StudentPanelController implements Initializable {
                 listView.getItems().add(selected);
                 optionsListView.getItems().remove(selected);
                 optionsListView.getSelectionModel().clearSelection();
+                updateLabel();
             }
         });
+    }
+
+    private void updateLabel() {
+        selectedCountLabel.setText(optionsListView.getItems().size() + "/10");
     }
 }
