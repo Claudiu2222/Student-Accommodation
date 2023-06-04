@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,7 +19,9 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
+@Data
 public class StudentPanelController implements Initializable {
     @FXML
     private ListView<Student> listView;
@@ -38,16 +41,18 @@ public class StudentPanelController implements Initializable {
 
     private StudentPanelService studentPanelService;
 
-    @Getter
-    @Setter
     private Integer userID;
 
     private List<Student> students;
 
+    public StudentPanelController(Integer userID) {
+        this.userID = userID;
+    }
 
     @FXML
     private void searchForInput() {
         String input = searchBox.getText();
+        System.out.println("USSSer ID: " + userID);
         HashSet<Student> options = new HashSet<>(optionsListView.getItems());
         listView.getItems().clear();
         if (input.isEmpty())
@@ -70,6 +75,7 @@ public class StudentPanelController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         StudentPanelService studentPanelService = new StudentPanelServiceImpl();
         try {
+            System.out.println("User IsadsadasdsaD: " + userID);
             students = studentPanelService.getStudents();
             listView.getItems().addAll(students);
         } catch (IOException e) {

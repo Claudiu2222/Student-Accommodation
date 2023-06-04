@@ -12,8 +12,9 @@ public class CredentialsServiceImpl implements CredentialsService {
     public final UserRepository userRepository;
 
     public CredentialsServiceImpl(UserRepository userRepository) {
-      this.userRepository = userRepository;
+        this.userRepository = userRepository;
     }
+
     @Override
     public Integer checkCredentials(Credentials credentials) {
         User user = userRepository.findUserByUsername(credentials.username());
@@ -43,7 +44,7 @@ public class CredentialsServiceImpl implements CredentialsService {
     }
 
     @Override
-    public void changePassword(String username, String oldPassword, String password) {
+    public Integer changePassword(String username, String oldPassword, String password) {
         User user = userRepository.findUserByUsername(username);
 
         if (user == null || !user.getPassword().equals(oldPassword)) {
@@ -55,6 +56,7 @@ public class CredentialsServiceImpl implements CredentialsService {
         user.setPassword(password);
         user.setFirstTime(false);
         userRepository.save(user);
+        return user.getId();
     }
 
     @Override

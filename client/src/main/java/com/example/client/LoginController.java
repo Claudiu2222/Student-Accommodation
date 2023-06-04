@@ -112,10 +112,9 @@ public class LoginController {
             }
             //Adaugam verificari mai tarziu cand facem backu
             FXMLLoader loader = new FXMLLoader(getClass().getResource("student-panel.fxml"));
+            loader.setControllerFactory(clazz -> new StudentPanelController(this.userID));
             Parent root = loader.load();
 
-            StudentPanelController controller2 = loader.getController();
-            controller2.setUserID(this.userID);
 
             Scene scene = new Scene(root);
             root.requestFocus();
@@ -167,7 +166,9 @@ public class LoginController {
                 } else {
                     return false;
                 }
-            } else { return false; }
+            } else {
+                return false;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -202,7 +203,7 @@ public class LoginController {
         AtomicBoolean result = new AtomicBoolean(false);
         // Handling the result of the alert
         alert.showAndWait().ifPresent(buttonType -> {
-           // Make an request to change the password
+            // Make an request to change the password
             HttpClient httpClient = HttpClientBuilder.create().build();
 
             try {
@@ -217,7 +218,7 @@ public class LoginController {
 
                 result.set(statusCode == 200);
 
-                this.userID = response.getEntity().getContent().read();
+                this.userID = Integer.parseInt(EntityUtils.toString(response.getEntity()));
                 System.out.println(this.userID);
             } catch (Exception e) {
                 e.printStackTrace();

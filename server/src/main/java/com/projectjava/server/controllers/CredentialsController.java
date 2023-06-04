@@ -3,6 +3,7 @@ package com.projectjava.server.controllers;
 import com.projectjava.server.models.entities.Credentials;
 import com.projectjava.server.services.CredentialsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,8 +18,8 @@ public class CredentialsController {
     }
 
     @PostMapping
-    public Integer checkCredentials(@RequestBody Credentials credentials) {
-        return credentialsService.checkCredentials(credentials);
+    public ResponseEntity<Integer> checkCredentials(@RequestBody Credentials credentials) {
+        return ResponseEntity.ok(credentialsService.checkCredentials(credentials));
     }
 
     @GetMapping(path = "/{username}")
@@ -27,8 +28,8 @@ public class CredentialsController {
     }
 
     @PostMapping(path = "/username={username}&oldpassword={oldpassword}&password={password}")
-    public void changePassword(@PathVariable String username, @PathVariable String oldpassword, @PathVariable String password) {
-        credentialsService.changePassword(username, oldpassword, password);
+    public ResponseEntity<Integer> changePassword(@PathVariable String username, @PathVariable String oldpassword, @PathVariable String password) {
+        return ResponseEntity.ok(credentialsService.changePassword(username, oldpassword, password));
     }
 
     @GetMapping(path = "/getRole&username={username}")
