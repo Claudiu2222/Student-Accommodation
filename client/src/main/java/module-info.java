@@ -8,7 +8,9 @@ module com.example.client {
     requires lombok;
     requires org.apache.httpcomponents.httpcore;
     requires org.apache.httpcomponents.httpclient;
+    requires com.fasterxml.jackson.databind;
 
     opens com.example.client to javafx.fxml;
+    exports com.example.entities to com.fasterxml.jackson.databind;
     exports com.example.client;
 }

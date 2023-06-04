@@ -82,8 +82,7 @@ public class LoginController {
     protected void login() throws IOException {
         if (passwordTextField.getText().isEmpty()) {
             passwordTextField.setPromptText("Introdu o parola");
-        }
-        else {
+        } else {
 
             // Complete the credential
             this.credentials.setPassword(passwordTextField.getText());
@@ -116,7 +115,6 @@ public class LoginController {
 
     private boolean checkIfUserExist() {
         HttpClient httpClient = HttpClientBuilder.create().build();
-
         try {
             String url = "http://localhost:8090/login/" + credentials.getUsername();
             HttpGet request = new HttpGet(url);

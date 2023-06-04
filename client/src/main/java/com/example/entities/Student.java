@@ -1,0 +1,22 @@
+package com.example.entities;
+
+import lombok.Data;
+
+@Data
+public class Student {
+    private Integer user_id;
+
+    private String firstName;
+
+    private String lastName;
+
+    private Integer yearIn;
+
+    private String groupIn;
+
+
+    @Override
+    public String toString() {
+        return this.firstName + " " + this.lastName;
+    }
+}
