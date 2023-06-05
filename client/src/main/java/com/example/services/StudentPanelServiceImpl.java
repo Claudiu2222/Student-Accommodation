@@ -17,11 +17,12 @@ import java.util.Set;
 public class StudentPanelServiceImpl implements StudentPanelService {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private final CloseableHttpClient httpClient = HttpClients.createDefault();
+    private final CloseableHttpClient httpClient;
     private Integer userID;
 
-    public StudentPanelServiceImpl(Integer userID) {
+    public StudentPanelServiceImpl(Integer userID, CloseableHttpClient httpClient) {
         this.userID = userID;
+        this.httpClient = httpClient;
     }
 
     public List<Student> getStudents() throws IOException {

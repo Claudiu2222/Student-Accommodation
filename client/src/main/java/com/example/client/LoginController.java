@@ -17,6 +17,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
@@ -26,6 +27,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class LoginController {
 
     private static Stage stage;
+
+    private CloseableHttpClient httpClient;
     @FXML
     private TextField codeTextField;
     @FXML
@@ -44,6 +47,11 @@ public class LoginController {
 
     public static void setStage(Stage stage) {
         LoginController.stage = stage;
+    }
+
+    public LoginController(Integer userID, CloseableHttpClient httpClient) {
+        this.userID = userID;
+        this.httpClient = httpClient;
     }
 
     @FXML
@@ -73,7 +81,8 @@ public class LoginController {
             }
 
             //Adaugam verificari mai tarziu cand facem backu
-            var loader = new FXMLLoader(getClass().getResource("Scene2.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("Scene2.fxml"));
+            loader.setControllerFactory(clazz -> new LoginController(null, this.httpClient));
             Parent root = loader.load();
             LoginController controller2 = loader.getController();
             controller2.setCredentials(this.credentials);
@@ -112,7 +121,7 @@ public class LoginController {
             }
             //Adaugam verificari mai tarziu cand facem backu
             FXMLLoader loader = new FXMLLoader(getClass().getResource("student-panel.fxml"));
-            loader.setControllerFactory(clazz -> new StudentPanelController(this.userID));
+            loader.setControllerFactory(clazz -> new StudentPanelController(this.userID, this.httpClient));
             Parent root = loader.load();
 
 

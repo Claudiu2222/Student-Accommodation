@@ -12,6 +12,7 @@ import javafx.scene.control.TextField;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.http.impl.client.CloseableHttpClient;
 
 import java.io.IOException;
 import java.net.URL;
@@ -20,6 +21,8 @@ import java.util.stream.Collectors;
 
 @Data
 public class StudentPanelController implements Initializable {
+
+    private CloseableHttpClient httpClient;
     @FXML
     private ListView<Student> listView;
 
@@ -47,8 +50,10 @@ public class StudentPanelController implements Initializable {
 
     private List<Student> students;
 
-    public StudentPanelController(Integer userID) {
+
+    public StudentPanelController(Integer userID, CloseableHttpClient httpClient) {
         this.userID = userID;
+        this.httpClient = httpClient;
     }
 
     @FXML
@@ -109,7 +114,7 @@ public class StudentPanelController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        studentPanelService = new StudentPanelServiceImpl(userID);
+        studentPanelService = new StudentPanelServiceImpl(userID, httpClient);
         optionsSet = new HashSet<>();
         try {
             students = studentPanelService.getStudents().stream().filter((student) -> !student.getUser_id().equals(userID)).toList();
