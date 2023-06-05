@@ -1,10 +1,12 @@
 package com.projectjava.server.services;
 
+import com.projectjava.server.exception_handling.exceptions.CannotChooseRoommateAfterMatchingsGeneratedException;
 import com.projectjava.server.exception_handling.exceptions.StudentCannotBeHisOwnRoommateException;
 import com.projectjava.server.exception_handling.exceptions.StudentDoesNotExistException;
 import com.projectjava.server.models.entities.Preference;
 import com.projectjava.server.models.entities.Student;
 import com.projectjava.server.repositories.PreferenceRepository;
+import com.projectjava.server.repositories.RoommateMatchingRepository;
 import com.projectjava.server.repositories.StudentRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,21 +20,26 @@ import java.util.Set;
 public class PreferenceServiceImpl implements PreferenceService {
 
     private final PreferenceRepository preferenceRepository;
-    private final StudentRepository studentRepository;
+    private final StudentService studentService;
+    private final RoommateMatchingRepository roommateMatchingRepository;
 
     @Autowired
-    public PreferenceServiceImpl(PreferenceRepository preferenceRepository, StudentRepository studentRepository) {
+    public PreferenceServiceImpl(PreferenceRepository preferenceRepository, StudentService studentService, RoommateMatchingRepository roommateMatchingRepository) {
         this.preferenceRepository = preferenceRepository;
-        this.studentRepository = studentRepository;
+        this.studentService = studentService;
+        this.roommateMatchingRepository = roommateMatchingRepository;
     }
 
     @Transactional
     @Override
     public void createPreference(Integer studentId, List<Student> preferencesOfStudent) {
-        Student stud1 = studentRepository.findById(studentId).orElseThrow(() -> new StudentDoesNotExistException(studentId));
+        if (roommateMatchingRepository.getCount() > 0) {
+            throw new CannotChooseRoommateAfterMatchingsGeneratedException();
+        }
+        Student stud1 = studentService.getStudent(studentId);
         int rank = 1;
         for (Student stud2 : preferencesOfStudent) {
-            Student existingStudent = studentRepository.findById(stud2.getUser_id()).orElseThrow(() -> new StudentDoesNotExistException(stud2.getUser_id()));
+            Student existingStudent = studentService.getStudent(stud2.getUser_id());
             if (stud1.getUser_id().equals(stud2.getUser_id())) {
                 throw new StudentCannotBeHisOwnRoommateException(stud1.getUser_id());
             }
@@ -44,7 +51,7 @@ public class PreferenceServiceImpl implements PreferenceService {
     @Transactional
     @Override
     public void deletePreferencesOfStudent(Integer studentId) {
-        Student stud = studentRepository.findById(studentId).orElseThrow(() -> new StudentDoesNotExistException(studentId));
+        Student stud = studentService.getStudent(studentId);
         preferenceRepository.deleteAllByStudentId(stud.getUser_id());
     }
 
@@ -55,7 +62,7 @@ public class PreferenceServiceImpl implements PreferenceService {
 
     @Override
     public Set<Student> getPreferencesOfStudent(Integer studentId) {
-        Student stud = studentRepository.findById(studentId).orElseThrow(() -> new StudentDoesNotExistException(studentId));
+        Student stud = studentService.getStudent(studentId);
         return new LinkedHashSet<>(preferenceRepository.findAllByStudentId(stud.getUser_id()));
     }
 }

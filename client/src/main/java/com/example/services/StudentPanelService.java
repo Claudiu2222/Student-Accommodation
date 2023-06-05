@@ -12,5 +12,7 @@ public interface StudentPanelService {
 
     boolean wereMatchingsGenerated() throws IOException;
 
-    public boolean wereUserPreferencesSent() throws IOException;
+    boolean wereUserPreferencesSent() throws IOException;
+
+    Student checkUsersMatch() throws IOException;
 }

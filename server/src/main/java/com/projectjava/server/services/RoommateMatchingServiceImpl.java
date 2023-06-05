@@ -39,6 +39,14 @@ public class RoommateMatchingServiceImpl implements RoommateMatchingService {
         return roommateMatchingRepository.findAll();
     }
 
+    public void deleteRoommateMatching() {
+        roommateMatchingRepository.deleteAll();
+    }
+
+    public Integer getRoommateMatchingsCount() {
+        return roommateMatchingRepository.getCount();
+    }
+
     @Transactional
     private void saveRoommateMatchings() {
         for (Student student : finalMatchings.keySet()) {

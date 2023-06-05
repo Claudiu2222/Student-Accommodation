@@ -9,4 +9,8 @@ import org.springframework.data.repository.query.Param;
 public interface RoommateMatchingRepository extends JpaRepository<Matching, Integer> {
     @Query("SELECT m.matchedStudent FROM Matching m WHERE m.student = :student")
     Student getRoommateMatchingOfStudent(@Param("student") Student student);
+
+
+    @Query(value = "SELECT COUNT(*) FROM matchings", nativeQuery = true)
+    Integer getCount();
 }

@@ -8,13 +8,13 @@ import java.util.List;
 
 @Service
 public interface StudentService {
-    public List<Student> getStudents();
+    List<Student> getStudents();
 
-    public void createStudent(UserStudentDTO newStudent);
+    void createStudent(UserStudentDTO newStudent);
 
-    public Student getStudent(Integer userID);
+    Student getStudent(Integer userID);
 
-    public void deleteStudent(Integer userID);
+    void deleteStudent(Integer userID);
 
-    public void createDummys(Integer numberOfDummies);
+    void createDummys(Integer numberOfDummies);
 }

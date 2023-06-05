@@ -61,7 +61,6 @@ public class StudentServiceImpl implements StudentService {
                     .groupIn("A4")
                     .yearIn(2)
                     .build();
-
             this.createStudent(newStudent);
         }
     }

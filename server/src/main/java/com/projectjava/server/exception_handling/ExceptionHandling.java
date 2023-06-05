@@ -20,4 +20,10 @@ public class ExceptionHandling {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler({CannotChooseRoommateAfterMatchingsGeneratedException.class})
+    public ResponseEntity<ErrorResponse> handleException(CannotChooseRoommateAfterMatchingsGeneratedException exception) {
+        ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+    }
+
 }

@@ -15,10 +15,7 @@ import lombok.Setter;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Data
@@ -30,7 +27,8 @@ public class StudentPanelController implements Initializable {
     private Label selectedCountLabel;
     @FXML
     private ListView<Student> optionsListView;
-
+    @FXML
+    private Button verifyStatusButton;
     @FXML
     private Button resetPreferencesButton;
 
@@ -45,6 +43,8 @@ public class StudentPanelController implements Initializable {
 
     private Integer userID;
 
+    private Set<Student> optionsSet;
+
     private List<Student> students;
 
     public StudentPanelController(Integer userID) {
@@ -54,13 +54,32 @@ public class StudentPanelController implements Initializable {
     @FXML
     private void searchForInput() {
         String input = searchBox.getText();
-        HashSet<Student> options = new HashSet<>(optionsListView.getItems());
         listView.getItems().clear();
         if (input.isEmpty())
-            listView.getItems().addAll(students.stream().filter((student) -> !options.contains(student)).toList());
+            listView.getItems().addAll(students.stream().filter((student) -> !optionsSet.contains(student)).toList());
         else {
-            listView.getItems().addAll(students.stream().filter((student) -> student.toString().contains(input) && !options.contains(student)).toList());
+            listView.getItems().addAll(students.stream().filter((student) -> student.toString().contains(input) && !optionsSet.contains(student)).toList());
         }
+    }
+
+    @FXML
+    private void verifyStatus() {
+        try {
+            if (!studentPanelService.wereMatchingsGenerated()) {
+                informationLabel.setText("Nu s-au generat inca repartizarile!");
+                return;
+            }
+            Student matching = studentPanelService.checkUsersMatch();
+            if (matching == null) {
+                disableSendOptions("Nu ai fost repartizat cu niciun Student!");
+                return;
+            }
+            disableSendOptions("Ai fost repartizat cu " + matching);
+        } catch (IOException e) {
+            informationLabel.setText("A aparut o eroare la verificarea statusului!");
+            e.printStackTrace();
+        }
+
     }
 
     @FXML
@@ -75,13 +94,13 @@ public class StudentPanelController implements Initializable {
     @FXML
     private void sendPreferences() {
         List<Student> options = optionsListView.getItems();
-
         if (options.size() == 0) {
             informationLabel.setText("Nu ai selectat niciun student!");
             return;
         }
         try {
             studentPanelService.sendPreferences(options);
+            disableSendOptions("Preferintele au fost trimise, asteapta!");
         } catch (Exception e) {
             informationLabel.setText("A aparut o eroare la trimiterea preferintelor!");
             e.printStackTrace();
@@ -91,6 +110,7 @@ public class StudentPanelController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         studentPanelService = new StudentPanelServiceImpl(userID);
+        optionsSet = new HashSet<>();
         try {
             students = studentPanelService.getStudents().stream().filter((student) -> !student.getUser_id().equals(userID)).toList();
             listView.getItems().addAll(students);
@@ -137,6 +157,13 @@ public class StudentPanelController implements Initializable {
             from.getItems().remove(student);
             from.getSelectionModel().clearSelection();
             updateLabel();
+
+
+            if (from == optionsListView)
+                optionsSet.remove(student);
+            else
+                optionsSet.add(student);
+
         }
     }
 
@@ -158,6 +185,7 @@ public class StudentPanelController implements Initializable {
         resetPreferencesButton.setDisable(true);
         informationLabel.setText(informationLabelText);
     }
+
 
     private void updateLabel() {
         selectedCountLabel.setText(optionsListView.getItems().size() + "/10");

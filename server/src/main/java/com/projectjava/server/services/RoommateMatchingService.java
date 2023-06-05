@@ -16,4 +16,8 @@ public interface RoommateMatchingService {
 
 
     Student getRoommateMatchingOfStudent(Integer studentId);
+
+    Integer getRoommateMatchingsCount();
+
+    void deleteRoommateMatching();
 }

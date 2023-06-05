@@ -6,10 +6,7 @@ import com.projectjava.server.models.entities.Student;
 import com.projectjava.server.services.RoommateMatchingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -25,7 +22,7 @@ public class RoommateMatchingController {
         this.roommateMatchingService = roommateMatchingService;
     }
 
-    @GetMapping(path = "/generate")
+    @PostMapping(path = "/generate")
     public void generateRoommateMatching() {
         roommateMatchingService.generateRoommateMatching();
     }
@@ -43,7 +40,12 @@ public class RoommateMatchingController {
 
     @GetMapping(path = "/count")
     public ResponseEntity<Integer> getNumberOfRoommateMatchings() {
-        Integer numberOfRoommateMatchings = roommateMatchingService.getRoommateMatchings().size();
+        Integer numberOfRoommateMatchings = roommateMatchingService.getRoommateMatchingsCount();
         return ResponseEntity.ok(numberOfRoommateMatchings);
+    }
+
+    @DeleteMapping
+    public void deleteRoommateMatching() {
+        roommateMatchingService.deleteRoommateMatching();
     }
 }
