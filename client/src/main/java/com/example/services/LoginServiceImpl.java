@@ -40,8 +40,8 @@ public class LoginServiceImpl implements LoginService {
             return Integer.parseInt(EntityUtils.toString(response.getEntity()));
         } catch (Exception e) {
             e.printStackTrace();
+            throw new RuntimeException("Password is not correct!");
         }
-        return null;
     }
 
     private void changePasswordBasedOnAlert() {
