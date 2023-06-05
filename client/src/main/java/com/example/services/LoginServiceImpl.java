@@ -97,7 +97,18 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public String getRole(String username) {
-        return null;
+    public String getRole() {
+        try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
+            HttpGet request = new HttpGet("http://localhost:8090/login/getRole&username=" + credential.getUsername());
+            HttpResponse response =  httpClient.execute(request);
+
+            if (response.getStatusLine().getStatusCode() != 200) {
+                throw new RuntimeException("User does not exist!");
+            }
+
+            return EntityUtils.toString(response.getEntity());
+        } catch (Exception e) {
+            throw new RuntimeException("User does not exist!");
+        }
     }
 }

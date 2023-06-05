@@ -1,0 +1,37 @@
+#labelAdmin {
+    -fx-border-color: black;
+    -fx-border-radius: 10;
+    -fx-alignment: center;
+    -fx-text-fill: #57934C;
+    -fx-font-weight: 600;
+    -fx-background-color: #FFEBCD;
+    -fx-background-radius: 10;
+}
+
+.button {
+    -fx-background-color: #1D656F;
+    -fx-text-fill: white;
+}
+
+.button:hover {
+    -fx-background-color: #45a049; /* culoarea de fundal la hover */
+    -fx-cursor: hand; /* cursor de tip mână la hover */
+}
+
+.button:focused {
+    -fx-background-color: #45a061;
+}
+
+#mainPane {
+    -fx-background-color: #FFB562;
+}
+
+#nameLabel {
+    -fx-alignment: center;
+    -fx-font-size: 20;
+    -fx-border-radius: 10;
+    -fx-text-fill: #57934C;
+    -fx-font-weight: 600;
+    -fx-background-color: #FFEBCD;
+    -fx-background-radius: 10;
+}

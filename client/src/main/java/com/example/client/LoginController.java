@@ -80,13 +80,26 @@ public class LoginController {
 
 
             System.out.println(this.userID);
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("student-panel.fxml"));
-            loader.setControllerFactory(clazz -> new StudentPanelController(this.userID, this.httpClient));
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
-            root.requestFocus();
-            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("stylesheet/student-panel.css")).toExternalForm());
-            stage.setScene(scene);
+            // Get the role of the user
+            String role = loginService.getRole();
+            if (role.equals("student")) {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("student-panel.fxml"));
+                loader.setControllerFactory(clazz -> new StudentPanelController(this.userID, this.httpClient));
+                Parent root = loader.load();
+                Scene scene = new Scene(root);
+                root.requestFocus();
+                scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("stylesheet/student-panel.css")).toExternalForm());
+                stage.setScene(scene);
+            }
+            else {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("admin-panel.fxml"));
+                loader.setControllerFactory(clazz -> new AdminPanel());
+                Parent root = loader.load();
+                Scene scene = new Scene(root);
+                root.requestFocus();
+                scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("stylesheet/admin-panel.css")).toExternalForm());
+                stage.setScene(scene);
+            }
         }
     }
 
