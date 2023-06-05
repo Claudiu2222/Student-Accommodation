@@ -25,7 +25,7 @@ public class CredentialsServiceImpl implements CredentialsService {
             );
         }
 
-        if (user.getFirstTime()) {
+        if (user.getUsername().equals(user.getPassword())) {
             throw new ResponseStatusException(
                     HttpStatusCode.valueOf(201)
             );
@@ -54,7 +54,6 @@ public class CredentialsServiceImpl implements CredentialsService {
         }
 
         user.setPassword(password);
-        user.setFirstTime(false);
         userRepository.save(user);
         return user.getId();
     }

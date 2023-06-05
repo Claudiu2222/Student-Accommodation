@@ -1,7 +1,7 @@
 package com.example.client;
 
 import com.example.data.Credential;
-import com.example.entities.Student;
+import com.example.services.LoginServiceImpl;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,86 +10,55 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.util.EntityUtils;
+
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.Objects;
 
 public class LoginController {
-
-    private static Stage stage;
-
+    @Getter
+    @Setter
+    private LoginServiceImpl loginService;
     private CloseableHttpClient httpClient;
-    @FXML
-    private TextField codeTextField;
-    @FXML
-    private TextField passwordTextField;
-
-    @FXML
-    private Button loginButton;
-
-    private Credential credentials;
-
-    private Integer userID;
-
-    public void setCredentials(Credential credentials) {
-        this.credentials = credentials;
-    }
-
-    public static void setStage(Stage stage) {
-        LoginController.stage = stage;
-    }
 
     public LoginController(Integer userID, CloseableHttpClient httpClient) {
         this.userID = userID;
         this.httpClient = httpClient;
+        if (this.loginService == null) {
+            this.loginService = new LoginServiceImpl();
+        }
     }
 
     @FXML
     protected void onHelloButtonClick() throws IOException {
-        if (codeTextField.getText().isEmpty())
+        if (codeTextField.getText().isEmpty()) {
             codeTextField.setPromptText("Introdu un numar matricol!");
-        else {
-            this.credentials = Credential.builder().username(codeTextField.getText()).build();
+        } else {
+            Credential credential = Credential.builder().username(codeTextField.getText()).build();
+            loginService.setCredential(credential);
 
-            // Make a http request to check if this user exist in the first place !
-            if (!checkIfUserExist()) {
-                codeTextField.setText("");
-                codeTextField.setPromptText("Introdu un numar matricol");
-
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Information");
-                alert.setHeaderText("Acest username este invalid!");
-
-                // Customize the alert buttons
-                ButtonType buttonTypeOk = new ButtonType("OK");
-                alert.getButtonTypes().setAll(buttonTypeOk);
-
-                // Handling the result of the alert
-                alert.showAndWait().ifPresent(buttonType -> {
-                });
+            try {
+                loginService.checkIfUsernameExist();
+            } catch (Exception e) {
+                makeInfoAlert("Acest username este invalid!");
                 return;
             }
 
-            //Adaugam verificari mai tarziu cand facem backu
+            // Change the scene
             FXMLLoader loader = new FXMLLoader(getClass().getResource("Scene2.fxml"));
             loader.setControllerFactory(clazz -> new LoginController(null, this.httpClient));
             Parent root = loader.load();
             LoginController controller2 = loader.getController();
-            controller2.setCredentials(this.credentials);
+            controller2.setLoginService(loginService);
             Scene scene = new Scene(root);
             root.requestFocus();
-            scene.getStylesheets().add(getClass().getResource("stylesheet/Scene2.css").toExternalForm());
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("stylesheet/Scene2.css")).toExternalForm());
             stage.setScene(scene);
+
         }
     }
 
@@ -98,144 +67,52 @@ public class LoginController {
         if (passwordTextField.getText().isEmpty()) {
             passwordTextField.setPromptText("Introdu o parola");
         } else {
+            // Add the password to the credential
+            loginService.getCredential().setPassword(passwordTextField.getText());
 
-            // Complete the credential
-            this.credentials.setPassword(passwordTextField.getText());
-
-            // Check if the credentials are ok
-            if (!checkCredentials()) {
-                passwordTextField.setText("");
-
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Information");
-                alert.setHeaderText("Parola gresita!");
-
-                // Customize the alert buttons
-                ButtonType buttonTypeOk = new ButtonType("OK");
-                alert.getButtonTypes().setAll(buttonTypeOk);
-
-                // Handling the result of the alert
-                alert.showAndWait().ifPresent(buttonType -> {
-                });
+            // Check if the password is correct
+            try {
+                this.userID = loginService.checkCredentials();
+            } catch (Exception e) {
+                makeInfoAlert("Parola este incorecta!");
                 return;
             }
-            //Adaugam verificari mai tarziu cand facem backu
+
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("student-panel.fxml"));
             loader.setControllerFactory(clazz -> new StudentPanelController(this.userID, this.httpClient));
             Parent root = loader.load();
-
-
             Scene scene = new Scene(root);
             root.requestFocus();
-            scene.getStylesheets().add(getClass().getResource("stylesheet/student-panel.css").toExternalForm());
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("stylesheet/student-panel.css")).toExternalForm());
             stage.setScene(scene);
         }
     }
 
-    private boolean checkIfUserExist() {
-        HttpClient httpClient = HttpClientBuilder.create().build();
-        try {
-            String url = "http://localhost:8090/login/" + credentials.getUsername();
-            HttpGet request = new HttpGet(url);
-            HttpResponse response = httpClient.execute(request);
-            int statusCode = response.getStatusLine().getStatusCode();
-            return statusCode == 200;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            httpClient.getConnectionManager().shutdown();
-        }
-    }
-
-    private boolean checkCredentials() {
-        HttpClient httpClient = HttpClientBuilder.create().build();
-
-        try {
-            String url = "http://localhost:8090/login";
-            HttpPost request = new HttpPost(url);
-
-            // Set the request body as a JSON string
-            String requestBody = String.format("{ \"username\": \"%s\", \"password\": \"%s\" }", credentials.getUsername(), credentials.getPassword());
-            StringEntity stringEntity = new StringEntity(requestBody);
-            request.setEntity(stringEntity);
-            request.setHeader("Content-Type", "application/json");
-
-            HttpResponse response = httpClient.execute(request);
-            int statusCode = response.getStatusLine().getStatusCode();
-
-            if (statusCode == 200) {
-                this.userID = Integer.parseInt(EntityUtils.toString(response.getEntity()));
-                System.out.println("User id: " + this.userID);
-                return true;
-            } else if (statusCode == 201) {
-                // Make an allert to request a new password
-                if (setNewPassword()) {
-                    return true;
-                } else {
-                    return false;
-                }
-            } else {
-                return false;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            httpClient.getConnectionManager().shutdown();
-        }
-    }
-
-    private boolean setNewPassword() {
-        // Make an alert to request a new password
+    public static void makeInfoAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Information");
-        alert.setHeaderText("Parola este prea veche!");
-
-        // input text field
-        TextField newpasswordTextField = new TextField();
-        newpasswordTextField.setPromptText("Introdu o parola noua");
-        newpasswordTextField.setPrefWidth(300);
-        newpasswordTextField.setPrefHeight(40);
+        alert.setHeaderText(message);
 
 
-        // Add the text field to the alert
-        VBox vBox = new VBox();
-        vBox.getChildren().add(newpasswordTextField);
-        alert.getDialogPane().setContent(vBox);
-
-        // Customize the alert buttons
         ButtonType buttonTypeOk = new ButtonType("OK");
         alert.getButtonTypes().setAll(buttonTypeOk);
 
-
-        AtomicBoolean result = new AtomicBoolean(false);
-        // Handling the result of the alert
+        // Waiting for the user to press the OK button
         alert.showAndWait().ifPresent(buttonType -> {
-            // Make an request to change the password
-            HttpClient httpClient = HttpClientBuilder.create().build();
-
-            try {
-                String url = "http://localhost:8090/login/username=" + credentials.getUsername() + "&oldpassword=" + credentials.getPassword() + "&password=" + newpasswordTextField.getText();
-                HttpPost request = new HttpPost(url);
-
-
-                HttpResponse response = httpClient.execute(request);
-                int statusCode = response.getStatusLine().getStatusCode();
-
-                System.out.println(statusCode);
-
-                result.set(statusCode == 200);
-
-                this.userID = Integer.parseInt(EntityUtils.toString(response.getEntity()));
-                System.out.println(this.userID);
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                httpClient.getConnectionManager().shutdown();
-            }
         });
+    }
 
-        return result.get();
+    // FXML Elements
+    private static Stage stage;
+    @FXML
+    private TextField codeTextField;
+    @FXML
+    private TextField passwordTextField;
+    @FXML
+    private Button loginButton;
+    private Integer userID;
+    public static void setStage(Stage stage) {
+        LoginController.stage = stage;
     }
 }
