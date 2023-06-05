@@ -32,12 +32,14 @@ public class StudentPanelController implements Initializable {
     private ListView<Student> optionsListView;
 
     @FXML
-    private Button resetOptionsButton;
+    private Button resetPreferencesButton;
 
     @FXML
     private TextField searchBox;
     @FXML
-    private Button sendOptionsButton;
+    private Label informationLabel;
+    @FXML
+    private Button sendPreferencesButton;
 
     private StudentPanelService studentPanelService;
 
@@ -52,7 +54,6 @@ public class StudentPanelController implements Initializable {
     @FXML
     private void searchForInput() {
         String input = searchBox.getText();
-        System.out.println("USSSer ID: " + userID);
         HashSet<Student> options = new HashSet<>(optionsListView.getItems());
         listView.getItems().clear();
         if (input.isEmpty())
@@ -63,7 +64,7 @@ public class StudentPanelController implements Initializable {
     }
 
     @FXML
-    private void removeOptions() {
+    private void resetPreferences() {
         optionsListView.getItems().clear();
         searchBox.clear();
         updateLabel();
@@ -71,12 +72,27 @@ public class StudentPanelController implements Initializable {
         listView.getItems().addAll(students);
     }
 
+    @FXML
+    private void sendPreferences() {
+        List<Student> options = optionsListView.getItems();
+
+        if (options.size() == 0) {
+            informationLabel.setText("Nu ai selectat niciun student!");
+            return;
+        }
+        try {
+            studentPanelService.sendPreferences(options);
+        } catch (Exception e) {
+            informationLabel.setText("A aparut o eroare la trimiterea preferintelor!");
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        StudentPanelService studentPanelService = new StudentPanelServiceImpl();
+        studentPanelService = new StudentPanelServiceImpl(userID);
         try {
-            System.out.println("User IsadsadasdsaD: " + userID);
-            students = studentPanelService.getStudents();
+            students = studentPanelService.getStudents().stream().filter((student) -> !student.getUser_id().equals(userID)).toList();
             listView.getItems().addAll(students);
         } catch (IOException e) {
             e.printStackTrace();
@@ -88,23 +104,59 @@ public class StudentPanelController implements Initializable {
                 listView.getSelectionModel().clearSelection();
                 return;
             }
-            if (selected != null) {
-                optionsListView.getItems().add(selected);
-                listView.getItems().remove(selected);
-                listView.getSelectionModel().clearSelection();
-                updateLabel();
-            }
+            moveSelectedStudent(listView, optionsListView, selected);
+
         });
 
         optionsListView.setOnMouseClicked(mouseEvent -> {
             Student selected = optionsListView.getSelectionModel().getSelectedItem();
-            if (selected != null) {
-                listView.getItems().add(selected);
-                optionsListView.getItems().remove(selected);
-                optionsListView.getSelectionModel().clearSelection();
-                updateLabel();
-            }
+            moveSelectedStudent(optionsListView, listView, selected);
         });
+
+
+        disableOptionsIfUserAlreadySentPreferences();
+        disableOptionsIfMatchingsWereGenerated();
+
+
+    }
+
+    private void disableOptionsIfUserAlreadySentPreferences() {
+        try {
+            if (studentPanelService.wereUserPreferencesSent()) {
+                disableSendOptions("Preferintele au fost trimise deja, asteapta!");
+            }
+        } catch (IOException e) {
+            informationLabel.setText("A aparut o eroare la verificarea existentei preferintelor!");
+        }
+
+    }
+
+    private void moveSelectedStudent(ListView<Student> from, ListView<Student> to, Student student) {
+        if (student != null) {
+            to.getItems().add(student);
+            from.getItems().remove(student);
+            from.getSelectionModel().clearSelection();
+            updateLabel();
+        }
+    }
+
+    private void disableOptionsIfMatchingsWereGenerated() {
+        try {
+            if (studentPanelService.wereMatchingsGenerated()) {
+                disableSendOptions("Matching-urile au fost generate deja!");
+            }
+        } catch (IOException e) {
+            informationLabel.setText("A aparut o eroare la verificarea existentei matching-urilor!");
+        }
+    }
+
+    private void disableSendOptions(String informationLabelText) {
+        optionsListView.setDisable(true);
+        listView.setDisable(true);
+        searchBox.setDisable(true);
+        sendPreferencesButton.setDisable(true);
+        resetPreferencesButton.setDisable(true);
+        informationLabel.setText(informationLabelText);
     }
 
     private void updateLabel() {

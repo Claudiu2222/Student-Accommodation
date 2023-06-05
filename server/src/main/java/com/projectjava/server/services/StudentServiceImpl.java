@@ -1,6 +1,7 @@
 package com.projectjava.server.services;
 
 import com.github.javafaker.Faker;
+import com.projectjava.server.exception_handling.exceptions.StudentDoesNotExistException;
 import com.projectjava.server.mapper.UserStudentMapper;
 import com.projectjava.server.models.dtos.UserStudentDTO;
 import com.projectjava.server.models.entities.Student;
@@ -38,7 +39,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student getStudent(Integer userID) {
-        Student student = studentRepository.findById(userID).orElseThrow(() -> new RuntimeException("Student not found"));
+        Student student = studentRepository.findById(userID).orElseThrow(() -> new StudentDoesNotExistException(userID));
         return student;
     }
 

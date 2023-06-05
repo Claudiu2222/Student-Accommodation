@@ -26,13 +26,19 @@ public class PreferenceServiceImpl implements PreferenceService {
         this.studentRepository = studentRepository;
     }
 
+    @Transactional
     @Override
-    public void createPreference(Integer studentId, Integer roommatePreferenceId, Integer rank) {
+    public void createPreference(Integer studentId, List<Student> preferencesOfStudent) {
         Student stud1 = studentRepository.findById(studentId).orElseThrow(() -> new StudentDoesNotExistException(studentId));
-        Student stud2 = studentRepository.findById(roommatePreferenceId).orElseThrow(() -> new StudentDoesNotExistException(roommatePreferenceId));
-        if (stud1.getUser_id().equals(stud2.getUser_id()))
-            throw new StudentCannotBeHisOwnRoommateException(stud1.getUser_id());
-        preferenceRepository.save(new Preference(stud1, stud2, rank));
+        int rank = 1;
+        for (Student stud2 : preferencesOfStudent) {
+            Student existingStudent = studentRepository.findById(stud2.getUser_id()).orElseThrow(() -> new StudentDoesNotExistException(stud2.getUser_id()));
+            if (stud1.getUser_id().equals(stud2.getUser_id())) {
+                throw new StudentCannotBeHisOwnRoommateException(stud1.getUser_id());
+            }
+            Preference preference = new Preference(stud1, stud2, rank++);
+            preferenceRepository.save(preference);
+        }
     }
 
     @Transactional

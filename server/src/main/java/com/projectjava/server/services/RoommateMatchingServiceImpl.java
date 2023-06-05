@@ -1,6 +1,9 @@
 package com.projectjava.server.services;
 
+import com.projectjava.server.models.entities.Matching;
 import com.projectjava.server.models.entities.Student;
+import com.projectjava.server.repositories.RoommateMatchingRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +13,7 @@ import java.util.*;
 public class RoommateMatchingServiceImpl implements RoommateMatchingService {
     private final StudentService studentService;
     private final PreferenceService preferenceService;
+    private final RoommateMatchingRepository roommateMatchingRepository;
     private List<Student> studentList;
     private Map<Student, Set<Student>> preferences;
     private Map<Student, Student> receivedProposal;
@@ -20,16 +24,26 @@ public class RoommateMatchingServiceImpl implements RoommateMatchingService {
 
 
     @Autowired
-    public RoommateMatchingServiceImpl(StudentService studentService, PreferenceService preferenceService) {
+    public RoommateMatchingServiceImpl(StudentService studentService, PreferenceService preferenceService, RoommateMatchingRepository roommateMatchingRepository) {
         this.studentService = studentService;
         this.preferenceService = preferenceService;
+        this.roommateMatchingRepository = roommateMatchingRepository;
     }
 
+    public Student getRoommateMatchingOfStudent(Integer studentId) {
+        Student student = studentService.getStudent(studentId);
+        return roommateMatchingRepository.getRoommateMatchingOfStudent(student);
+    }
 
-    public Map<Student, Student> getRoommateMatchings() {
-        generateRoommateMatching();
-        getFinalMatchings();
-        return finalMatchings;
+    public List<Matching> getRoommateMatchings() {
+        return roommateMatchingRepository.findAll();
+    }
+
+    @Transactional
+    private void saveRoommateMatchings() {
+        for (Student student : finalMatchings.keySet()) {
+            roommateMatchingRepository.save(new Matching(student, finalMatchings.get(student)));
+        }
     }
 
     private void getFinalMatchings() {
@@ -42,12 +56,15 @@ public class RoommateMatchingServiceImpl implements RoommateMatchingService {
         }
     }
 
+
     @Override
     public void generateRoommateMatching() {
         initializeDataStructures();
         preparePreferences();
         runIrvingAlgorithm();
         randomizeRemainingStudents();
+        getFinalMatchings();
+        saveRoommateMatchings();
     }
 
     private void initializeDataStructures() {

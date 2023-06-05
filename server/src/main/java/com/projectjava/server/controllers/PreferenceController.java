@@ -20,9 +20,9 @@ public class PreferenceController {
         this.preferenceService = preferenceService;
     }
 
-    @PostMapping(path = "{studentId}/{roommatePreferenceId}/{rank}")
-    public void createPreference(@PathVariable("studentId") Integer studentId, @PathVariable("roommatePreferenceId") Integer roommatePreferenceId, @PathVariable("rank") Integer rank) {
-        preferenceService.createPreference(studentId, roommatePreferenceId, rank);
+    @PostMapping(path = "/{studentId}")
+    public void createPreference(@PathVariable("studentId") Integer studentId, @RequestBody List<Student> preferencesOfStudent) {
+        preferenceService.createPreference(studentId, preferencesOfStudent);
     }
 
     @GetMapping
@@ -30,12 +30,12 @@ public class PreferenceController {
         return preferenceService.getPreferences();
     }
 
-    @GetMapping(path = "{studentId}")
+    @GetMapping(path = "/{studentId}")
     public Set<Student> getPreferencesOfStudent(@PathVariable("studentId") Integer studentId) {
         return preferenceService.getPreferencesOfStudent(studentId);
     }
 
-    @DeleteMapping(path = "{studentId}")
+    @DeleteMapping(path = "/{studentId}")
     public void deletePreferencesOfStudent(@PathVariable("studentId") Integer studentId) {
         preferenceService.deletePreferencesOfStudent(studentId);
     }

@@ -21,12 +21,12 @@
             </font>
         </Label>
         <TextField fx:id="searchBox" layoutX="175.0" layoutY="132.0" onKeyTyped="#searchForInput" prefHeight="26.0" prefWidth="181.0" promptText="Cauta nume..." />
-        <Button fx:id="sendOptionsButton" layoutX="422.0" layoutY="312.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="181.0" text="Trimite optiunile alese">
+        <Button fx:id="sendPreferencesButton" layoutX="422.0" layoutY="312.0" mnemonicParsing="false" onAction="#sendPreferences" prefHeight="56.0" prefWidth="181.0" text="Trimite optiunile alese">
             <font>
                 <Font name="Arial Bold" size="15.0" />
             </font>
         </Button>
-        <Button fx:id="resetOptionsButton" layoutX="438.0" layoutY="234.0" mnemonicParsing="false" onAction="#removeOptions" prefHeight="56.0" prefWidth="150.0" text="Sterge Repartizări">
+        <Button fx:id="resetPreferencesButton" layoutX="438.0" layoutY="234.0" mnemonicParsing="false" onAction="#resetPreferences" prefHeight="56.0" prefWidth="150.0" text="Sterge Repartizări">
             <font>
                 <Font name="Arial Bold" size="15.0" />
             </font>
@@ -43,6 +43,11 @@
             </font>
         </Label>
       <Label fx:id="selectedCountLabel" alignment="CENTER" contentDisplay="TOP" layoutX="665.0" layoutY="535.0" prefHeight="41.0" prefWidth="346.0" text="0/10" textAlignment="CENTER" textFill="#3ab0ff">
+         <font>
+            <Font name="Arial Bold" size="17.0" />
+         </font>
+      </Label>
+      <Label fx:id="informationLabel" alignment="CENTER" contentDisplay="TOP" layoutX="388.0" layoutY="420.0" prefHeight="118.0" prefWidth="250.0" textAlignment="CENTER" textFill="#d01d1d" wrapText="true">
          <font>
             <Font name="Arial Bold" size="17.0" />
          </font>

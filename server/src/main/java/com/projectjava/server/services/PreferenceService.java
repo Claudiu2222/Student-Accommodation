@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Service
 public interface PreferenceService {
-    public void createPreference(Integer studentId, Integer roommatePreferenceId, Integer rank);
+    public void createPreference(Integer studentId, List<Student> preferencesOfStudent);
 
     public void deletePreferencesOfStudent(Integer studentId);
 

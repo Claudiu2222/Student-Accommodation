@@ -16,8 +16,8 @@ public class Student {
     private String groupIn;
 
 
-//    @Override
-//    public String toString() {
-//        return this.firstName + " " + this.lastName;
-//    }
+    @Override
+    public String toString() {
+        return this.firstName + " " + this.lastName;
+    }
 }
