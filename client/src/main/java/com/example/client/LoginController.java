@@ -79,6 +79,7 @@ public class LoginController {
             }
 
 
+            System.out.println(this.userID);
             FXMLLoader loader = new FXMLLoader(getClass().getResource("student-panel.fxml"));
             loader.setControllerFactory(clazz -> new StudentPanelController(this.userID, this.httpClient));
             Parent root = loader.load();

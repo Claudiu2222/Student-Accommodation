@@ -39,7 +39,6 @@ public class LoginServiceImpl implements LoginService {
             }
             return Integer.parseInt(EntityUtils.toString(response.getEntity()));
         } catch (Exception e) {
-            e.printStackTrace();
             throw new RuntimeException("Password is not correct!");
         }
     }
@@ -77,7 +76,6 @@ public class LoginServiceImpl implements LoginService {
                 throw new RuntimeException("User does not exist!");
             }
         } catch (Exception e) {
-            e.printStackTrace();
             throw new RuntimeException("User does not exist!");
         }
     }
@@ -94,7 +92,7 @@ public class LoginServiceImpl implements LoginService {
 
             this.credential.setPassword(password);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException("User does not exist!");
         }
     }
 
