@@ -53,9 +53,10 @@ public class StudentServiceImpl implements StudentService {
     public void createDummys(Integer numberOfDummies) {
         for (int i = 1; i <= numberOfDummies; i++) {
             Faker fakeStudent = new Faker();
+            String nameToUsername = fakeStudent.name().username();
             var newStudent = UserStudentDTO.builder()
-                    .username(fakeStudent.name().username())
-                    .password(fakeStudent.internet().password())
+                    .username(nameToUsername)
+                    .password(nameToUsername)
                     .firstName(fakeStudent.name().firstName())
                     .lastName(fakeStudent.name().lastName())
                     .groupIn("A4")
