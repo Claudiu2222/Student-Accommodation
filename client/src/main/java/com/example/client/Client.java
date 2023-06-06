@@ -17,15 +17,17 @@ public class Client extends Application {
 
     private CloseableHttpClient httpClient;
 
+    private Stage stage;
+
     @Override
     public void start(Stage primaryStage) throws IOException {
         httpClient = HttpClients.createDefault();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Scene1.fxml"));
-        loader.setControllerFactory(clazz -> new LoginController(null, this.httpClient));
+        loader.setControllerFactory(clazz -> new LoginController(null, this.httpClient, primaryStage));
         Parent root = loader.load();
         Scene scene = new Scene(root);
 
-        LoginController.setStage(primaryStage);
+        // LoginController.setStage(primaryStage);
 
         scene.getStylesheets().add(getClass().getResource("stylesheet/Scene1.css").toExternalForm());
 

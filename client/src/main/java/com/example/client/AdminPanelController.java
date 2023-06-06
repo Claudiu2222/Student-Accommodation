@@ -15,6 +15,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.*;
+import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -30,12 +31,14 @@ public class AdminPanelController implements Initializable {
 
     private final CloseableHttpClient httpClient;
     private Integer userID;
+    private Stage stage;
 
     // -- COD REFACTORIZAT
 
-    public AdminPanelController(Integer userID, CloseableHttpClient httpClient) {
+    public AdminPanelController(Integer userID, CloseableHttpClient httpClient, Stage stage) {
         this.userID = userID;
         this.httpClient = httpClient;
+        this.stage = stage;
     }
 
     @Getter
@@ -49,7 +52,6 @@ public class AdminPanelController implements Initializable {
     @FXML
     private ListView<Student> listView;
 
-    List<Student> students;
 
     @FXML
     private Button searchButton;
@@ -133,24 +135,24 @@ public class AdminPanelController implements Initializable {
     private void searchForInput(Event e) {
         String input = searchBox.getText();
 
-
-        // Changing the list
-        listView.getItems().removeAll(students);
-        if (input.equals("")) {
-            listView.getItems().addAll(students);
-        } else {
-            listView.getItems().addAll(students.stream().filter(student -> student.getFullName().contains(input)).toArray(Student[]::new));
-        }
+//
+//        // Changing the list
+//        listView.getItems().removeAll(students);
+//        if (input.equals("")) {
+//            listView.getItems().addAll(students);
+//        } else {
+//            listView.getItems().addAll(students.stream().filter(student -> student.getFullName().contains(input)).toArray(Student[]::new));
+//        }
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         AdminService adminService = new AdminServiceImpl(userID, httpClient);
-        this.students = adminService.getStudents();
-
-        listView.getItems().addAll(students); // IDK REALLY
-
-
+//        this.students = adminService.getStudents();
+//
+//        listView.getItems().addAll(students); // IDK REALLY
+//
+//        listView.getItems().addAll(students);
         changePasswordButton.setVisible(false);
         changePasswordButton.setFocusTraversable(false);
         deleteAccountButton.setFocusTraversable(false);

@@ -31,7 +31,7 @@
                 <Font name="Arial Bold" size="15.0" />
             </font>
         </Button>
-        <Button layoutX="930.0" layoutY="45.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="81.0" text="Logout">
+        <Button fx:id="logoutButton" layoutX="930.0" layoutY="45.0" mnemonicParsing="false" onAction="#logout" prefHeight="26.0" prefWidth="81.0" text="Logout">
             <font>
                 <Font name="Arial Bold" size="15.0" />
             </font>

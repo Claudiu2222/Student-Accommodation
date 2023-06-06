@@ -1,8 +1,14 @@
 package com.example.services;
 
+import com.example.client.LoginController;
+import com.example.client.StudentPanelController;
 import com.example.data.Credential;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.http.HttpResponse;
@@ -11,6 +17,9 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+
+import java.io.IOException;
+import java.util.Objects;
 
 public class LoginServiceImpl implements LoginService {
 
@@ -69,7 +78,7 @@ public class LoginServiceImpl implements LoginService {
     public void checkIfUsernameExist() {
         try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
             HttpGet request = new HttpGet("http://localhost:8090/login/" + credential.getUsername());
-            HttpResponse response =  httpClient.execute(request);
+            HttpResponse response = httpClient.execute(request);
 
             System.out.println(response.getStatusLine().getStatusCode());
             if (response.getStatusLine().getStatusCode() != 200) {
@@ -83,7 +92,7 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public void changePassword(String username, String oldPassword, String password) {
         try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
-            HttpPost request = new HttpPost("http://localhost:8090/login/username=" + username + "&oldpassword="+ oldPassword+"&password=" + password);
+            HttpPost request = new HttpPost("http://localhost:8090/login/username=" + username + "&oldpassword=" + oldPassword + "&password=" + password);
             HttpResponse response = httpClient.execute(request);
 
             if (response.getStatusLine().getStatusCode() != 200) {
@@ -100,7 +109,7 @@ public class LoginServiceImpl implements LoginService {
     public String getRole() {
         try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
             HttpGet request = new HttpGet("http://localhost:8090/login/getRole&username=" + credential.getUsername());
-            HttpResponse response =  httpClient.execute(request);
+            HttpResponse response = httpClient.execute(request);
 
             if (response.getStatusLine().getStatusCode() != 200) {
                 throw new RuntimeException("User does not exist!");
@@ -111,4 +120,6 @@ public class LoginServiceImpl implements LoginService {
             throw new RuntimeException("User does not exist!");
         }
     }
+
+
 }

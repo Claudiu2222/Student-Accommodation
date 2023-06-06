@@ -24,10 +24,12 @@ public class LoginController {
     @Setter
     private LoginServiceImpl loginService;
     private CloseableHttpClient httpClient;
+    private Stage stage;
 
-    public LoginController(Integer userID, CloseableHttpClient httpClient) {
+    public LoginController(Integer userID, CloseableHttpClient httpClient, Stage stage) {
         this.userID = userID;
         this.httpClient = httpClient;
+        this.stage = stage;
         if (this.loginService == null) {
             this.loginService = new LoginServiceImpl();
         }
@@ -50,7 +52,7 @@ public class LoginController {
 
             // Change the scene
             FXMLLoader loader = new FXMLLoader(getClass().getResource("Scene2.fxml"));
-            loader.setControllerFactory(clazz -> new LoginController(null, this.httpClient));
+            loader.setControllerFactory(clazz -> new LoginController(null, this.httpClient, stage));
             Parent root = loader.load();
             LoginController controller2 = loader.getController();
             controller2.setLoginService(loginService);
@@ -84,7 +86,7 @@ public class LoginController {
             String role = loginService.getRole();
             if (role.equals("student")) {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("student-panel.fxml"));
-                loader.setControllerFactory(clazz -> new StudentPanelController(this.userID, this.httpClient));
+                loader.setControllerFactory(clazz -> new StudentPanelController(this.userID, this.httpClient, stage));
                 Parent root = loader.load();
                 Scene scene = new Scene(root);
                 root.requestFocus();
@@ -92,7 +94,7 @@ public class LoginController {
                 stage.setScene(scene);
             } else {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("admin-panel.fxml"));
-                loader.setControllerFactory(clazz -> new AdminPanelController(this.userID, this.httpClient));
+                loader.setControllerFactory(clazz -> new AdminPanelController(this.userID, this.httpClient, stage));
                 Parent root = loader.load();
                 Scene scene = new Scene(root);
                 root.requestFocus();
@@ -117,7 +119,6 @@ public class LoginController {
     }
 
     // FXML Elements
-    private static Stage stage;
     @FXML
     private TextField codeTextField;
     @FXML
@@ -126,7 +127,4 @@ public class LoginController {
     private Button loginButton;
     private Integer userID;
 
-    public static void setStage(Stage stage) {
-        LoginController.stage = stage;
-    }
 }

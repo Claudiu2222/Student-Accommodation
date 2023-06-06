@@ -1,14 +1,20 @@
 package com.example.client;
 
 import com.example.entities.Student;
+import com.example.services.LoginService;
+import com.example.services.LoginServiceImpl;
 import com.example.services.StudentPanelService;
 import com.example.services.StudentPanelServiceImpl;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,9 +29,12 @@ import java.util.stream.Collectors;
 public class StudentPanelController implements Initializable {
 
     private CloseableHttpClient httpClient;
+    private Stage stage;
     @FXML
     private ListView<Student> listView;
 
+    @FXML
+    private Button logoutButton;
     @FXML
     private Label selectedCountLabel;
     @FXML
@@ -44,6 +53,7 @@ public class StudentPanelController implements Initializable {
 
     private StudentPanelService studentPanelService;
 
+
     private Integer userID;
 
     private Set<Student> optionsSet;
@@ -51,9 +61,10 @@ public class StudentPanelController implements Initializable {
     private List<Student> students;
 
 
-    public StudentPanelController(Integer userID, CloseableHttpClient httpClient) {
+    public StudentPanelController(Integer userID, CloseableHttpClient httpClient, Stage stage) {
         this.userID = userID;
         this.httpClient = httpClient;
+        this.stage = stage;
     }
 
     @FXML
@@ -194,4 +205,16 @@ public class StudentPanelController implements Initializable {
     private void updateLabel() {
         selectedCountLabel.setText(optionsListView.getItems().size() + "/10");
     }
+
+    @FXML
+    private void logout() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Scene1.fxml"));
+        loader.setControllerFactory(clazz -> new LoginController(null, httpClient, stage));
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
+        root.requestFocus();
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("stylesheet/Scene1.css")).toExternalForm());
+        stage.setScene(scene);
+    }
+
 }

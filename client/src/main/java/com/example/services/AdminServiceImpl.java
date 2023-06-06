@@ -31,7 +31,6 @@ public class AdminServiceImpl implements AdminService {
     public AdminServiceImpl(Integer userID, CloseableHttpClient httpClient) {
         this.userID = userID;
         this.httpClient = httpClient;
-
         studentPanelService = new StudentPanelServiceImpl(userID, httpClient);
     }
 
