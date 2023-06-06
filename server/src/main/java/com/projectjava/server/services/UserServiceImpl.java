@@ -41,4 +41,11 @@ public class UserServiceImpl implements UserService{
     public Integer getId(String username) {
         return userRepository.findUserByUsername(username).getId();
     }
+
+    @Override
+    public void resetPassword(Integer id) {
+        User userToUpdate = userRepository.findById(id).orElseThrow(()-> new RuntimeException("User not found"));
+        userToUpdate.setPassword(userToUpdate.getUsername());
+        userRepository.save(userToUpdate);
+    }
 }

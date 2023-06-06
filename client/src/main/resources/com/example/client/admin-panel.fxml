@@ -21,8 +21,7 @@
                 <Font name="Arial Bold" size="17.0" />
             </font>
         </Label>
-        <TextField fx:id="searchBox" layoutX="175.0" layoutY="132.0" onKeyTyped="#searchForInput" prefHeight="26.0" prefWidth="136.0" promptText="Cauta nume..." />
-        <Button fx:id="searchButton" layoutX="317.0" layoutY="132.0" mnemonicParsing="false" onAction="#searchForInput" prefHeight="26.0" prefWidth="42.0" text="P" />
+        <TextField fx:id="searchBox" layoutX="175.0" layoutY="132.0" onAction="#searchForInput" onKeyTyped="#searchForInput" prefHeight="26.0" prefWidth="181.0" promptText="Cauta nume..." />
         <Button fx:id="generateButton" layoutX="97.0" layoutY="650.0" mnemonicParsing="false" onAction="#generateMatching" prefHeight="56.0" prefWidth="181.0" text="Genereaza Repartizări">
             <font>
                 <Font name="Arial Bold" size="15.0" />
@@ -38,12 +37,12 @@
                 <Font name="Arial Bold" size="15.0" />
             </font>
         </Button>
-        <Button fx:id="changePasswordButton" layoutX="431.0" layoutY="211.0" mnemonicParsing="false" prefHeight="68.0" prefWidth="163.0" text="Schimbare Parola">
+        <Button fx:id="changePasswordButton" layoutX="431.0" layoutY="211.0" mnemonicParsing="false" onAction="#resetPassword" prefHeight="68.0" prefWidth="163.0" text="Resetare Parola">
             <font>
                 <Font name="Arial Bold" size="15.0" />
             </font>
         </Button>
-        <Button fx:id="deleteAccountButton" layoutX="698.0" layoutY="211.0" mnemonicParsing="false" prefHeight="68.0" prefWidth="163.0" text="Sterge Cont">
+        <Button fx:id="deleteAccountButton" layoutX="698.0" layoutY="211.0" mnemonicParsing="false" onAction="#deleteStudent" prefHeight="68.0" prefWidth="163.0" text="Sterge Cont">
             <font>
                 <Font name="Arial Bold" size="15.0" />
             </font>
@@ -55,5 +54,10 @@
             </font>
         </Label>
         <Label fx:id="nameLabel" layoutX="482.0" layoutY="157.0" prefHeight="41.0" prefWidth="347.0" text="Label" />
+      <Button fx:id="deletePrefferences" layoutX="431.0" layoutY="321.0" mnemonicParsing="false" onAction="#deletePrefferences" prefHeight="68.0" prefWidth="163.0" text="Sterge Preferinte">
+         <font>
+            <Font name="Arial Bold" size="15.0" />
+         </font>
+      </Button>
     </children>
 </AnchorPane>

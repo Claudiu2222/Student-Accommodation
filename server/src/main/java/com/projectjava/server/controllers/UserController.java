@@ -47,4 +47,9 @@ public class UserController {
     public Integer getId(@PathVariable String username) {
         return userService.getId(username);
     }
+
+    @PutMapping(path = "/resetPassword&id={id}")
+    public void resetPassword(@PathVariable Integer id) {
+        userService.resetPassword(id);
+    }
 }

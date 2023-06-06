@@ -1,15 +1,13 @@
 package com.example.services;
 
 import com.example.entities.Student;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.impl.client.CloseableHttpClient;
 
 import java.io.IOException;
@@ -40,6 +38,57 @@ public class AdminServiceImpl implements AdminService {
             return studentPanelService.getStudents();
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void deleteStudent(Student student) throws Exception {
+        String url = "http://localhost:8090/users/" + student.getUser_id();
+        HttpDelete request = new HttpDelete(url);
+        HttpResponse response = httpClient.execute(request);
+
+        if (response.getStatusLine().getStatusCode() != 200) {
+            throw new Exception("Failed to delete student");
+        }
+    }
+
+    @Override
+    public void resetPassword(Student student) throws Exception {
+        String url = "http://localhost:8090/users/resetPassword&id=" + student.getUser_id();
+        HttpPut request = new HttpPut(url);
+        HttpResponse response = httpClient.execute(request);
+        if (response.getStatusLine().getStatusCode() != 200) {
+            throw new Exception("Failed to delete student");
+        }
+    }
+
+    @Override
+    public void deletePreference(Student student) throws Exception {
+        String url = "http://localhost:8090/preferences/" + student.getUser_id();
+        HttpDelete request = new HttpDelete(url);
+        HttpResponse response = httpClient.execute(request);
+        if (response.getStatusLine().getStatusCode() != 200) {
+            throw new Exception("Failed to delete student");
+        }
+    }
+
+    @Override
+    public void deleteMatchings() throws Exception {
+        String url = "http://localhost:8090/roommate-matching";
+        HttpDelete request = new HttpDelete(url);
+        HttpResponse response = httpClient.execute(request);
+        if (response.getStatusLine().getStatusCode() != 200) {
+            throw new Exception("Failed to delete matchings");
+        }
+    }
+
+    @Override
+    public void generateMatchings() throws Exception {
+        String url = "http://localhost:8090/roommate-matching/generate";
+        HttpPost request = new HttpPost(url);
+        HttpResponse response = httpClient.execute(request);
+        if (response.getStatusLine().getStatusCode() != 200) {
+            throw new Exception("Failed to generate matchings");
         }
     }
 }

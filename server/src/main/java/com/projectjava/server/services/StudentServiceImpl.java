@@ -1,6 +1,7 @@
 package com.projectjava.server.services;
 
 import com.github.javafaker.Faker;
+import com.github.javafaker.Name;
 import com.projectjava.server.exception_handling.exceptions.StudentDoesNotExistException;
 import com.projectjava.server.mapper.UserStudentMapper;
 import com.projectjava.server.models.dtos.UserStudentDTO;
@@ -53,12 +54,16 @@ public class StudentServiceImpl implements StudentService {
     public void createDummys(Integer numberOfDummies) {
         for (int i = 1; i <= numberOfDummies; i++) {
             Faker fakeStudent = new Faker();
-            String nameToUsername = fakeStudent.name().username();
+            Name name = fakeStudent.name();
+            String firstName = name.firstName();
+            String lastName = name.lastName();
+
+            String nameToUsername = String.format("%s.%s", firstName.toLowerCase(), lastName.toLowerCase());
             var newStudent = UserStudentDTO.builder()
                     .username(nameToUsername)
                     .password(nameToUsername)
-                    .firstName(fakeStudent.name().firstName())
-                    .lastName(fakeStudent.name().lastName())
+                    .firstName(firstName)
+                    .lastName(lastName)
                     .groupIn("A4")
                     .yearIn(2)
                     .build();

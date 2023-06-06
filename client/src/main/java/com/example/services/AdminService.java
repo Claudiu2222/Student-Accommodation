@@ -6,4 +6,9 @@ import java.util.List;
 
 public interface AdminService {
     List<Student> getStudents();
+    void deleteStudent(Student student) throws Exception;
+    void resetPassword(Student student) throws Exception;
+    void deletePreference(Student student) throws Exception;
+    void deleteMatchings() throws Exception;
+    void generateMatchings() throws Exception;
 }
