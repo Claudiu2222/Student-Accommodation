@@ -2,6 +2,16 @@
     -fx-background-color: #FFB562;
 }
 
+#labelAdmin {
+    -fx-border-color: black;
+    -fx-border-radius: 10;
+    -fx-alignment: center;
+    -fx-text-fill: #57934C;
+    -fx-font-weight: 600;
+    -fx-background-color: #FFEBCD;
+    -fx-background-radius: 10;
+}
+
 Button {
     -fx-background-color: #3AB0FF;
     -fx-background-radius: 30;
