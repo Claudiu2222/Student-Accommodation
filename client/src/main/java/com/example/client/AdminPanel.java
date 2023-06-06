@@ -1,5 +1,7 @@
 package com.example.client;
 
+import com.example.entities.Student;
+import com.example.services.AdminServiceImpl;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,13 +14,30 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.*;
+import lombok.Getter;
+import lombok.Setter;
+import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.net.URL;
 import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 
 
 public class AdminPanel implements Initializable {
+
+    // -- COD REFACTORIZAT
+    public AdminPanel() {
+        if (adminService == null) {
+            adminService = new AdminServiceImpl();
+            adminService.setHttpClient(HttpClientBuilder.create().build());
+        }
+    }
+    @Getter
+    @Setter
+    private AdminServiceImpl adminService;
+
+    //
     @FXML
     private Label labelAdmin;
 
@@ -144,7 +163,10 @@ public class AdminPanel implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        listView.getItems().addAll(students);
+
+        List<Student> students = adminService.getStudents();
+
+        listView.getItems().addAll(students.stream().map(Student::getFullName).toList());
         changePasswordButton.setVisible(false);
         changePasswordButton.setFocusTraversable(false);
         deleteAccountButton.setFocusTraversable(false);
