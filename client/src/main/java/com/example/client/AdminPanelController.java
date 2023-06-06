@@ -1,6 +1,7 @@
 package com.example.client;
 
 import com.example.entities.Student;
+import com.example.services.AdminService;
 import com.example.services.AdminServiceImpl;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -16,6 +17,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.net.URL;
@@ -24,15 +26,18 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 
-public class AdminPanel implements Initializable {
+public class AdminPanelController implements Initializable {
+
+    private final CloseableHttpClient httpClient;
+    private Integer userID;
 
     // -- COD REFACTORIZAT
-    public AdminPanel() {
-        if (adminService == null) {
-            adminService = new AdminServiceImpl();
-            adminService.setHttpClient(HttpClientBuilder.create().build());
-        }
+
+    public AdminPanelController(Integer userID, CloseableHttpClient httpClient) {
+        this.userID = userID;
+        this.httpClient = httpClient;
     }
+
     @Getter
     @Setter
     private AdminServiceImpl adminService;
@@ -163,6 +168,7 @@ public class AdminPanel implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        AdminService adminService = new AdminServiceImpl(userID, httpClient);
 
         List<Student> students = adminService.getStudents();
 

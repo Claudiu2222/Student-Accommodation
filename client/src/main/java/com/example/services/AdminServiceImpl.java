@@ -19,15 +19,23 @@ public class AdminServiceImpl implements AdminService {
 
     @Getter
     @Setter
-    CloseableHttpClient httpClient;
+    private CloseableHttpClient httpClient;
+    private Integer userID;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+
+    public AdminServiceImpl(Integer userID, CloseableHttpClient httpClient) {
+        this.userID = userID;
+        this.httpClient = httpClient;
+    }
+
     @Override
     public List<Student> getStudents() {
         String url = "http://localhost:8090/students";
         HttpGet request = new HttpGet(url);
-        try(CloseableHttpResponse response = httpClient.execute(request)) {
-            return objectMapper.readValue(response.getEntity().getContent(), new TypeReference<List<Student>>() {});
+        try (CloseableHttpResponse response = httpClient.execute(request)) {
+            return objectMapper.readValue(response.getEntity().getContent(), new TypeReference<List<Student>>() {
+            });
         } catch (IOException e) {
             throw new RuntimeException("Failed to get students", e);
         }

@@ -90,10 +90,9 @@ public class LoginController {
                 root.requestFocus();
                 scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("stylesheet/student-panel.css")).toExternalForm());
                 stage.setScene(scene);
-            }
-            else {
+            } else {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("admin-panel.fxml"));
-                loader.setControllerFactory(clazz -> new AdminPanel());
+                loader.setControllerFactory(clazz -> new AdminPanelController(this.userID, this.httpClient));
                 Parent root = loader.load();
                 Scene scene = new Scene(root);
                 root.requestFocus();
@@ -126,6 +125,7 @@ public class LoginController {
     @FXML
     private Button loginButton;
     private Integer userID;
+
     public static void setStage(Stage stage) {
         LoginController.stage = stage;
     }

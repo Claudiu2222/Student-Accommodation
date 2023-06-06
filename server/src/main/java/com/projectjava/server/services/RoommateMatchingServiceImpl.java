@@ -72,6 +72,7 @@ public class RoommateMatchingServiceImpl implements RoommateMatchingService {
         runIrvingAlgorithm();
         randomizeRemainingStudents();
         getFinalMatchings();
+        System.out.println("AM TERMINAT");
         saveRoommateMatchings();
     }
 

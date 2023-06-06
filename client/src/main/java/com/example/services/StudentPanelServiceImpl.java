@@ -3,6 +3,7 @@ package com.example.services;
 import com.example.entities.Student;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -72,6 +73,8 @@ public class StudentPanelServiceImpl implements StudentPanelService {
         HttpGet request = new HttpGet(url);
         try (CloseableHttpResponse response = httpClient.execute(request)) {
             return objectMapper.readValue(response.getEntity().getContent(), Student.class);
+        } catch (MismatchedInputException e) {
+            return null;
         }
     }
 
