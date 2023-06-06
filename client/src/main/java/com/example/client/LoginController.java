@@ -1,6 +1,8 @@
 package com.example.client;
 
 import com.example.data.Credential;
+import com.example.scene_manager.SceneTransitionManager;
+import com.example.services.LoginService;
 import com.example.services.LoginServiceImpl;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,14 +24,14 @@ import java.util.Objects;
 public class LoginController {
     @Getter
     @Setter
-    private LoginServiceImpl loginService;
+    private LoginService loginService;
     private CloseableHttpClient httpClient;
-    private Stage stage;
+    private SceneTransitionManager sceneTransitionManager;
 
-    public LoginController(Integer userID, CloseableHttpClient httpClient, Stage stage) {
+    public LoginController(Integer userID, CloseableHttpClient httpClient, SceneTransitionManager sceneTransitionManager) {
         this.userID = userID;
         this.httpClient = httpClient;
-        this.stage = stage;
+        this.sceneTransitionManager = sceneTransitionManager;
         if (this.loginService == null) {
             this.loginService = new LoginServiceImpl();
         }
@@ -49,18 +51,7 @@ public class LoginController {
                 makeInfoAlert("Acest username este invalid!");
                 return;
             }
-
-            // Change the scene
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("Scene2.fxml"));
-            loader.setControllerFactory(clazz -> new LoginController(null, this.httpClient, stage));
-            Parent root = loader.load();
-            LoginController controller2 = loader.getController();
-            controller2.setLoginService(loginService);
-            Scene scene = new Scene(root);
-            root.requestFocus();
-            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("stylesheet/Scene2.css")).toExternalForm());
-            stage.setScene(scene);
-
+            sceneTransitionManager.transitionToPasswordScene(loginService);
         }
     }
 
@@ -80,26 +71,13 @@ public class LoginController {
                 return;
             }
 
-
             System.out.println(this.userID);
             // Get the role of the user
             String role = loginService.getRole();
             if (role.equals("student")) {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("student-panel.fxml"));
-                loader.setControllerFactory(clazz -> new StudentPanelController(this.userID, this.httpClient, stage));
-                Parent root = loader.load();
-                Scene scene = new Scene(root);
-                root.requestFocus();
-                scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("stylesheet/student-panel.css")).toExternalForm());
-                stage.setScene(scene);
+                sceneTransitionManager.transitionToStudentPanelScene(this.userID);
             } else {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("admin-panel.fxml"));
-                loader.setControllerFactory(clazz -> new AdminPanelController(this.userID, this.httpClient, stage));
-                Parent root = loader.load();
-                Scene scene = new Scene(root);
-                root.requestFocus();
-                scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("stylesheet/admin-panel.css")).toExternalForm());
-                stage.setScene(scene);
+                sceneTransitionManager.transitionToAdminPanelScene(this.userID);
             }
         }
     }
@@ -108,7 +86,6 @@ public class LoginController {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Information");
         alert.setHeaderText(message);
-
 
         ButtonType buttonTypeOk = new ButtonType("OK");
         alert.getButtonTypes().setAll(buttonTypeOk);

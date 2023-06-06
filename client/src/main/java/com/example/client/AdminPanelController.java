@@ -1,6 +1,7 @@
 package com.example.client;
 
 import com.example.entities.Student;
+import com.example.scene_manager.SceneTransitionManager;
 import com.example.services.AdminService;
 import com.example.services.AdminServiceImpl;
 import javafx.event.Event;
@@ -21,6 +22,7 @@ import lombok.Setter;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
@@ -31,14 +33,14 @@ public class AdminPanelController implements Initializable {
 
     private final CloseableHttpClient httpClient;
     private Integer userID;
-    private Stage stage;
+    private final SceneTransitionManager sceneTransitionManager;
 
     // -- COD REFACTORIZAT
 
-    public AdminPanelController(Integer userID, CloseableHttpClient httpClient, Stage stage) {
+    public AdminPanelController(Integer userID, CloseableHttpClient httpClient, SceneTransitionManager sceneTransitionManager) {
         this.userID = userID;
         this.httpClient = httpClient;
-        this.stage = stage;
+        this.sceneTransitionManager = sceneTransitionManager;
     }
 
     @Getter
@@ -162,5 +164,10 @@ public class AdminPanelController implements Initializable {
         nameLabel.setVisible(false);
 
         statusLabelRooms.setText("");
+    }
+
+    @FXML
+    private void logout() throws IOException {
+        sceneTransitionManager.transitionToLoginScene();
     }
 }

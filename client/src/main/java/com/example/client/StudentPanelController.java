@@ -1,6 +1,7 @@
 package com.example.client;
 
 import com.example.entities.Student;
+import com.example.scene_manager.SceneTransitionManager;
 import com.example.services.LoginService;
 import com.example.services.LoginServiceImpl;
 import com.example.services.StudentPanelService;
@@ -29,7 +30,7 @@ import java.util.stream.Collectors;
 public class StudentPanelController implements Initializable {
 
     private CloseableHttpClient httpClient;
-    private Stage stage;
+    private SceneTransitionManager sceneTransitionManager;
     @FXML
     private ListView<Student> listView;
 
@@ -61,10 +62,10 @@ public class StudentPanelController implements Initializable {
     private List<Student> students;
 
 
-    public StudentPanelController(Integer userID, CloseableHttpClient httpClient, Stage stage) {
+    public StudentPanelController(Integer userID, CloseableHttpClient httpClient, SceneTransitionManager sceneTransitionManager) {
         this.userID = userID;
         this.httpClient = httpClient;
-        this.stage = stage;
+        this.sceneTransitionManager = sceneTransitionManager;
     }
 
     @FXML
@@ -208,13 +209,7 @@ public class StudentPanelController implements Initializable {
 
     @FXML
     private void logout() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Scene1.fxml"));
-        loader.setControllerFactory(clazz -> new LoginController(null, httpClient, stage));
-        Parent root = loader.load();
-        Scene scene = new Scene(root);
-        root.requestFocus();
-        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("stylesheet/Scene1.css")).toExternalForm());
-        stage.setScene(scene);
+        sceneTransitionManager.transitionToLoginScene();
     }
 
 }
