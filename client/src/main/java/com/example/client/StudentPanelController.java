@@ -163,7 +163,6 @@ public class StudentPanelController implements Initializable {
             from.getSelectionModel().clearSelection();
             updateLabel();
 
-
             if (from == optionsListView)
                 optionsSet.remove(student);
             else

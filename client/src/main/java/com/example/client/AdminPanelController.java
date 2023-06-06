@@ -47,32 +47,9 @@ public class AdminPanelController implements Initializable {
     private Label labelAdmin;
 
     @FXML
-    private ListView<String> listView;
+    private ListView<Student> listView;
 
-    private final String[] students = {
-            "Popoiu Claudiu",
-            "Gulica Silvian",
-            "Duluman Sebastian",
-            "Fiodorov Cristian",
-            "Buraga Cristian",
-            "Valeriu Predoiu",
-            "Ovidiu Pescariu",
-            "Luca Grigorescu",
-            "Neculai Oprea",
-            "Oana Ciocîrlan",
-            "Florin Teodorescu",
-            "Alecu Niță",
-            "Cătălin Matei",
-            "Sabina Dumitru",
-            "Ania Manolache",
-            "Geanina Tocmelea",
-            "Homner Albu",
-            "Monica Manolache",
-            "Sergiu Nistor",
-            "Emilian Georgescu",
-            "Ovidiu Oană"
-
-    };
+    List<Student> students;
 
     @FXML
     private Button searchButton;
@@ -144,11 +121,11 @@ public class AdminPanelController implements Initializable {
 
     @FXML
     private void showOptionOnSelectedItem(MouseEvent event) {
-        String item = listView.getFocusModel().getFocusedItem();
+        Student item = listView.getFocusModel().getFocusedItem();
         changePasswordButton.setVisible(true);
         deleteAccountButton.setVisible(true);
 
-        this.nameLabel.setText(item);
+        this.nameLabel.setText(item.getFullName());
         this.nameLabel.setVisible(true);
     }
 
@@ -162,17 +139,18 @@ public class AdminPanelController implements Initializable {
         if (input.equals("")) {
             listView.getItems().addAll(students);
         } else {
-            listView.getItems().addAll(Arrays.stream(students).filter((element) -> element.contains(input)).toList());
+            listView.getItems().addAll(students.stream().filter(student -> student.getFullName().contains(input)).toArray(Student[]::new));
         }
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         AdminService adminService = new AdminServiceImpl(userID, httpClient);
+        this.students = adminService.getStudents();
 
-        List<Student> students = adminService.getStudents();
+        listView.getItems().addAll(students); // IDK REALLY
 
-        listView.getItems().addAll(students.stream().map(Student::getFullName).toList());
+
         changePasswordButton.setVisible(false);
         changePasswordButton.setFocusTraversable(false);
         deleteAccountButton.setFocusTraversable(false);
