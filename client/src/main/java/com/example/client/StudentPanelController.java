@@ -2,29 +2,20 @@ package com.example.client;
 
 import com.example.entities.Student;
 import com.example.scene_manager.SceneTransitionManager;
-import com.example.services.LoginService;
-import com.example.services.LoginServiceImpl;
 import com.example.services.StudentPanelService;
 import com.example.services.StudentPanelServiceImpl;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import org.apache.http.impl.client.CloseableHttpClient;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Data
 public class StudentPanelController implements Initializable {

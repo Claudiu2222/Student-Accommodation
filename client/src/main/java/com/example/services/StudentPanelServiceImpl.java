@@ -10,7 +10,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 
 import java.io.IOException;
 import java.util.List;
@@ -32,7 +31,7 @@ public class StudentPanelServiceImpl implements StudentPanelService {
         String url = "http://localhost:8090/students";
         HttpGet request = new HttpGet(url);
         try (CloseableHttpResponse response = httpClient.execute(request)) {
-            return objectMapper.readValue(response.getEntity().getContent(), new TypeReference<List<Student>>() {
+            return objectMapper.readValue(response.getEntity().getContent(), new TypeReference<>() {
             });
         }
     }

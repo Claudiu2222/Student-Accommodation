@@ -5,28 +5,23 @@ import com.example.scene_manager.SceneTransitionManager;
 import com.example.services.LoginService;
 import com.example.services.LoginServiceImpl;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.http.impl.client.CloseableHttpClient;
 
 
 import java.io.IOException;
-import java.util.Objects;
 
 public class LoginController {
     @Getter
     @Setter
     private LoginService loginService;
-    private CloseableHttpClient httpClient;
-    private SceneTransitionManager sceneTransitionManager;
+    private final CloseableHttpClient httpClient;
+    private final SceneTransitionManager sceneTransitionManager;
 
     public LoginController(Integer userID, CloseableHttpClient httpClient, SceneTransitionManager sceneTransitionManager) {
         this.userID = userID;
@@ -60,10 +55,8 @@ public class LoginController {
         if (passwordTextField.getText().isEmpty()) {
             passwordTextField.setPromptText("Introdu o parola");
         } else {
-            // Add the password to the credential
-            loginService.getCredential().setPassword(passwordTextField.getText());
 
-            // Check if the password is correct
+            loginService.getCredential().setPassword(passwordTextField.getText());
             try {
                 this.userID = loginService.checkCredentials();
             } catch (Exception e) {
@@ -72,7 +65,6 @@ public class LoginController {
             }
 
             System.out.println(this.userID);
-            // Get the role of the user
             String role = loginService.getRole();
             if (role.equals("student")) {
                 sceneTransitionManager.transitionToStudentPanelScene(this.userID);
@@ -90,12 +82,10 @@ public class LoginController {
         ButtonType buttonTypeOk = new ButtonType("OK");
         alert.getButtonTypes().setAll(buttonTypeOk);
 
-        // Waiting for the user to press the OK button
         alert.showAndWait().ifPresent(buttonType -> {
         });
     }
 
-    // FXML Elements
     @FXML
     private TextField codeTextField;
     @FXML

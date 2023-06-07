@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -19,7 +18,7 @@ public class AdminServiceImpl implements AdminService {
     @Getter
     @Setter
     private CloseableHttpClient httpClient;
-    private Integer userID;
+    private final Integer userID;
 
     @Getter
     @Setter
