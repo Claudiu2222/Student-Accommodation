@@ -10,11 +10,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.io.IOException;
 import java.net.URL;
@@ -26,8 +24,6 @@ public class AdminPanelController implements Initializable {
     private final CloseableHttpClient httpClient;
     private Integer userID;
     private final SceneTransitionManager sceneTransitionManager;
-
-    // -- COD REFACTORIZAT
 
     public AdminPanelController(Integer userID, CloseableHttpClient httpClient, SceneTransitionManager sceneTransitionManager) {
         this.userID = userID;
@@ -66,22 +62,6 @@ public class AdminPanelController implements Initializable {
     private Label pariedLabel;
     @FXML
     private void deleteRooms() {
-//        Text info = new Text("Status Repartizări: ");
-//        info.setFill(Color.BLACK);
-//        info.setFont(Font.font("Arial", FontWeight.BOLD, 17));
-//        info.setTextAlignment(TextAlignment.CENTER);
-//
-//        Text status = new Text("Invalide");
-//        status.setFill(Color.RED);
-//        status.setFont(Font.font("Arial", FontWeight.BOLD, 17));
-//        status.setTextAlignment(TextAlignment.CENTER);
-//
-//        TextFlow flowText = new TextFlow(info, status);
-//        flowText.setTextAlignment(TextAlignment.CENTER);
-//        flowText.setPadding(new Insets(12));
-//
-//        statusLabelRooms.setText("");
-//        statusLabelRooms.setGraphic(flowText);
         try {
             adminService.deleteMatchings();
 
@@ -101,23 +81,6 @@ public class AdminPanelController implements Initializable {
 
     @FXML
     private void generateMatching() {
-//        Text info = new Text("Status Repartizări: ");
-//        info.setFill(Color.BLACK);
-//        info.setFont(Font.font("Arial", FontWeight.BOLD, 17));
-//        info.setTextAlignment(TextAlignment.CENTER);
-//
-//        Text status = new Text("Generate");
-//        status.setFill(Color.GREEN);
-//        status.setFont(Font.font("Arial", FontWeight.BOLD, 17));
-//        status.setTextAlignment(TextAlignment.CENTER);
-//
-//        TextFlow flowText = new TextFlow(info, status);
-//        flowText.setTextAlignment(TextAlignment.CENTER);
-//        flowText.setPadding(new Insets(12));
-//
-//        statusLabelRooms.setText("");
-//        statusLabelRooms.setGraphic(flowText);
-
         try {
             adminService.generateMatchings();
 
