@@ -11,7 +11,7 @@
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.client.StudentPanelController">
     <children>
         <Label fx:id="labelAdmin" contentDisplay="TOP" layoutX="14.0" layoutY="14.0" prefHeight="89.0" prefWidth="244.0"
-               text="Student Accomodation&#10;Admin Panel" textFill="#941b17">
+               text="Student Accomodation&#10;Student Panel" textFill="#941b17">
             <font>
                 <Font name="Arial" size="23.0"/>
             </font>
