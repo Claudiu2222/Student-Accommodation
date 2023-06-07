@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -47,7 +48,7 @@ public class AdminServiceImpl implements AdminService {
         HttpDelete request = new HttpDelete(url);
         HttpResponse response = httpClient.execute(request);
 
-        if (response.getStatusLine().getStatusCode() != 200) {
+        if (response.getStatusLine().getStatusCode() >= 400) {
             throw new Exception("Failed to delete student");
         }
     }
@@ -57,7 +58,7 @@ public class AdminServiceImpl implements AdminService {
         String url = "http://localhost:8090/users/resetPassword&id=" + student.getUser_id();
         HttpPut request = new HttpPut(url);
         HttpResponse response = httpClient.execute(request);
-        if (response.getStatusLine().getStatusCode() != 200) {
+        if (response.getStatusLine().getStatusCode() >= 400) {
             throw new Exception("Failed to delete student");
         }
     }
@@ -67,7 +68,7 @@ public class AdminServiceImpl implements AdminService {
         String url = "http://localhost:8090/preferences/" + student.getUser_id();
         HttpDelete request = new HttpDelete(url);
         HttpResponse response = httpClient.execute(request);
-        if (response.getStatusLine().getStatusCode() != 200) {
+        if (response.getStatusLine().getStatusCode() >= 400) {
             throw new Exception("Failed to delete student");
         }
     }
@@ -77,7 +78,7 @@ public class AdminServiceImpl implements AdminService {
         String url = "http://localhost:8090/roommate-matching";
         HttpDelete request = new HttpDelete(url);
         HttpResponse response = httpClient.execute(request);
-        if (response.getStatusLine().getStatusCode() != 200) {
+        if (response.getStatusLine().getStatusCode() >= 400) {
             throw new Exception("Failed to delete matchings");
         }
     }
@@ -87,8 +88,16 @@ public class AdminServiceImpl implements AdminService {
         String url = "http://localhost:8090/roommate-matching/generate";
         HttpPost request = new HttpPost(url);
         HttpResponse response = httpClient.execute(request);
-        if (response.getStatusLine().getStatusCode() != 200) {
+        if (response.getStatusLine().getStatusCode() >= 400) {
             throw new Exception("Failed to generate matchings");
         }
+    }
+
+    @Override
+    public Student getPariedStudent(Student selectedStudent) throws IOException {
+        studentPanelService.setUserID(selectedStudent.getUser_id());
+        Student pairedStudent = studentPanelService.checkUsersMatch();
+        System.out.println(pairedStudent);
+        return pairedStudent;
     }
 }

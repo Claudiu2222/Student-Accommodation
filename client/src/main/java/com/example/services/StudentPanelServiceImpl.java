@@ -4,6 +4,7 @@ import com.example.entities.Student;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
+import lombok.Setter;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -19,6 +20,7 @@ public class StudentPanelServiceImpl implements StudentPanelService {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final CloseableHttpClient httpClient;
+    @Setter
     private Integer userID;
 
     public StudentPanelServiceImpl(Integer userID, CloseableHttpClient httpClient) {

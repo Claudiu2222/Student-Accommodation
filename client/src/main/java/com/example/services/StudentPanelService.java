@@ -15,4 +15,5 @@ public interface StudentPanelService {
     boolean wereUserPreferencesSent() throws IOException;
 
     Student checkUsersMatch() throws IOException;
+    void setUserID(Integer userID);
 }

@@ -63,6 +63,8 @@ public class AdminPanelController implements Initializable {
     private Button deletePrefferences;
     Student selectedStudent;
     @FXML
+    private Label pariedLabel;
+    @FXML
     private void deleteRooms() {
 //        Text info = new Text("Status Repartizări: ");
 //        info.setFill(Color.BLACK);
@@ -165,6 +167,7 @@ public class AdminPanelController implements Initializable {
             deleteAccountButton.setVisible(false);
             deletePrefferences.setVisible(false);
             this.nameLabel.setVisible(false);
+            this.pariedLabel.setVisible(false);
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Success");
@@ -214,6 +217,16 @@ public class AdminPanelController implements Initializable {
 
         this.nameLabel.setText(selectedStudent.getFullName());
         this.nameLabel.setVisible(true);
+
+        // Check for parring
+        try {
+            Student studentMatched = adminService.getPariedStudent(selectedStudent);
+
+            this.pariedLabel.setText("A fost repartizat cu: " + studentMatched.getFullName());
+        } catch (Exception e) {
+            this.pariedLabel.setText("Nu a fost repartizat");
+        }
+        this.pariedLabel.setVisible(true);
     }
 
     @FXML
@@ -245,6 +258,7 @@ public class AdminPanelController implements Initializable {
         generateButton.setFocusTraversable(false);
         deleteRoomsButton.setFocusTraversable(false);
         nameLabel.setVisible(false);
+        pariedLabel.setVisible(false);
 
         statusLabelRooms.setText("");
     }

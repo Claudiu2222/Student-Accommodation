@@ -59,5 +59,6 @@
             <Font name="Arial Bold" size="15.0" />
          </font>
       </Button>
+      <Label fx:id="pariedLabel" layoutX="482.0" layoutY="462.0" prefHeight="41.0" prefWidth="347.0" text="A fost repartizat cu : " />
     </children>
 </AnchorPane>

@@ -34,7 +34,7 @@ Button:pressed {
     -fx-background-color: #FFB562;
 }
 
-#nameLabel {
+#nameLabel, #pariedLabel {
     -fx-alignment: center;
     -fx-font-size: 20;
     -fx-border-radius: 10;
