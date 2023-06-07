@@ -26,7 +26,7 @@ public class SceneTransitionManager {
     }
 
     public void transitionToLoginScene() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/client/Scene1.fxml"));
+        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/example/client/Scene1.fxml")));
         loader.setControllerFactory(clazz -> new LoginController(null, this.httpClient, this));
         Parent root = loader.load();
         Scene scene = new Scene(root);
@@ -36,7 +36,7 @@ public class SceneTransitionManager {
     }
 
     public void transitionToPasswordScene(LoginService loginService) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/client/Scene2.fxml"));
+        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/example/client/Scene2.fxml")));
         loader.setControllerFactory(clazz -> new LoginController(null, this.httpClient, this));
         Parent root = loader.load();
         LoginController controller2 = loader.getController();
@@ -48,7 +48,7 @@ public class SceneTransitionManager {
     }
 
     public void transitionToStudentPanelScene(Integer userID) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/client/student-panel.fxml"));
+        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/example/client/student-panel.fxml")));
         loader.setControllerFactory(clazz -> new StudentPanelController(userID, this.httpClient, this));
         Parent root = loader.load();
         Scene scene = new Scene(root);
@@ -58,7 +58,7 @@ public class SceneTransitionManager {
     }
 
     public void transitionToAdminPanelScene(Integer userID) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/client/admin-panel.fxml"));
+        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/com/example/client/admin-panel.fxml")));
         loader.setControllerFactory(clazz -> new AdminPanelController(userID, this.httpClient, this));
         Parent root = loader.load();
         Scene scene = new Scene(root);
