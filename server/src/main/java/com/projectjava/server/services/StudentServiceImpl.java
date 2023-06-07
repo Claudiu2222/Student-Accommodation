@@ -7,6 +7,8 @@ import com.projectjava.server.mapper.UserStudentMapper;
 import com.projectjava.server.models.dtos.UserStudentDTO;
 import com.projectjava.server.models.entities.Student;
 import com.projectjava.server.models.entities.User;
+import com.projectjava.server.repositories.PreferenceRepository;
+import com.projectjava.server.repositories.RoommateMatchingRepository;
 import com.projectjava.server.repositories.StudentRepository;
 import com.projectjava.server.repositories.UserRepository;
 import org.springframework.stereotype.Service;
@@ -18,10 +20,14 @@ public class StudentServiceImpl implements StudentService {
 
     private final UserRepository userRepository;
     private final StudentRepository studentRepository;
+    private final PreferenceRepository preferencesRepository;
+    private final RoommateMatchingRepository roommateMatchingRepository;
 
-    public StudentServiceImpl(UserRepository userRepository, StudentRepository studentRepository) {
+    public StudentServiceImpl(UserRepository userRepository, StudentRepository studentRepository, PreferenceRepository preferencesRepository, RoommateMatchingRepository roommateMatchingRepository) {
         this.userRepository = userRepository;
         this.studentRepository = studentRepository;
+        this.preferencesRepository = preferencesRepository;
+        this.roommateMatchingRepository = roommateMatchingRepository;
     }
 
     @Override
@@ -47,6 +53,9 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public void deleteStudent(Integer userID) {
         userRepository.deleteById(userID);
+        preferencesRepository.deleteAllByStudentId(userID);
+        roommateMatchingRepository.deleteAllByStudentId(userID);
+
     }
 
     @Override

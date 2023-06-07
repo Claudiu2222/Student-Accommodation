@@ -13,7 +13,7 @@ import java.util.List;
 public interface PreferenceRepository extends JpaRepository<Preference, Integer> {
 
     @Modifying
-    @Query(value = "DELETE FROM preferences WHERE student_id = :stud_id", nativeQuery = true)
+    @Query(value = "DELETE FROM preferences WHERE student_id = :stud_id OR preference_id = :stud_id", nativeQuery = true)
     void deleteAllByStudentId(@Param("stud_id") Integer studentID);
 
 
